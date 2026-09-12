@@ -237,51 +237,168 @@
 </section>
 
 <section class="view" id="phase5" hidden>
-  <div class="workspace equal">
-    <section class="card">
-      <div class="panelhead"><div class="phase-kicker">Phase 5A/5B</div><h2>Realdaten prüfen und mit dem Modell vergleichen</h2></div>
-      <div class="panelbody formgrid">
-        <div class="checkrow"><input id="useDelay" type="checkbox" checked><label for="useDelay" style="display:inline">Startverzögerung auf der Zeitachse berücksichtigen</label></div>
-        <label>Schätzwert <span data-notation="inf">A∞</span><input id="aInfInput" type="number" step="0.0001"></label>
-        <span class="note">Beim ersten Import wird <span data-notation="inf">A∞</span> aus den letzten Messpunkten geschätzt. Der Wert bleibt sichtbar und kann begründet verändert werden.</span>
-        <div class="chartwrap"><canvas class="chart" id="overlayCanvas" width="900" height="400"></canvas></div>
-        <div class="chartwrap" style="margin-top:12px"><canvas class="chart" id="normCanvas" width="900" height="400"></canvas></div>
-        <div class="info"><strong>Vergleichsfrage:</strong> Welche Unterschiede betreffen nur die absolute <span data-notation="name">Absorbanz</span> – und welche den zeitlichen Verlauf?</div>
+  <section class="card" style="margin-top:16px">
+    <div class="panelbody">
+      <div class="phase-kicker">Phase 5 · Auswerten und Erkenntnis gewinnen</div>
+      <h2 style="margin:3px 0 8px">Von der Messkurve zum Geschwindigkeitsgesetz</h2>
+      <div class="lead">Immer nur der nächste Auswertungsschritt ist im Blick. Beschreibt zunächst, was die Daten zeigen – erst danach wird mathematisch weitergearbeitet.</div>
+      <div class="subnav" id="phase5Subnav" style="margin-top:14px;margin-bottom:0">
+        <button class="active" data-sub5="5a" type="button">5A · Rohdaten</button>
+        <button data-sub5="5b" type="button">5B · Real ↔ Modell</button>
+        <button data-sub5="5c" type="button">5C · Reaktionsordnung</button>
+        <button data-sub5="5d" type="button">5D · Rolle von OH⁻</button>
+        <button data-sub5="5e" type="button">5E · Wellenlänge</button>
+        <button data-sub5="5f" type="button">Erkenntnis</button>
       </div>
-    </section>
-    <section class="card">
-      <div class="panelhead"><div class="phase-kicker">Phase 5C</div><h2>Welche Darstellung wird linear?</h2></div>
-      <div class="panelbody formgrid">
-        <label>Darstellung<select id="transformSelect"><option id="transformZeroOption" value="zero">A − A∞ gegen t</option><option id="transformFirstOption" value="first" selected>ln(A − A∞) gegen t</option><option id="transformSecondOption" value="second">1/(A − A∞) gegen t</option></select></label>
-        <div class="r2-grid"><div class="r2-card"><span id="r2ZeroLabel">A − A∞</span><strong id="r2Zero">–</strong></div><div class="r2-card"><span id="r2FirstLabel">ln(A − A∞)</span><strong id="r2First">–</strong></div><div class="r2-card"><span id="r2SecondLabel">1/(A − A∞)</span><strong id="r2Second">–</strong></div></div>
-        <div class="chartwrap"><canvas class="chart" id="transformCanvas" width="900" height="400"></canvas></div>
-        <div class="info" id="fitInfo">Noch keine auswertbare Realdatenreihe vorhanden.</div>
-        <label>Unsere Schlussfolgerung<textarea id="analysisConclusion" placeholder="Welche Reaktionsordnung wird durch die Messdaten am besten gestützt? Wie sicher ist diese Aussage?"></textarea></label>
-      </div>
-    </section>
+    </div>
+  </section>
+
+  <div class="subpane" id="sub5a">
+    <div class="workspace">
+      <aside class="card">
+        <div class="panelhead"><div class="phase-kicker">Phase 5A</div><h2>Sind unsere Messdaten plausibel?</h2></div>
+        <div class="panelbody formgrid">
+          <div class="question">Was lässt sich aus der Rohmesskurve beschreiben, ohne bereits eine Reaktionsordnung anzunehmen?</div>
+          <div class="checkrow"><input id="useDelay" type="checkbox" checked><label for="useDelay" style="display:inline">dokumentierte Startverzögerung auf der Zeitachse berücksichtigen</label></div>
+          <label>Schätzwert <span data-notation="inf">A∞</span><input id="aInfInput" type="number" step="0.0001"></label>
+          <span class="note">Beim ersten Import wird <span data-notation="inf">A∞</span> aus den letzten Messpunkten geschätzt. Der Wert bleibt sichtbar und kann begründet verändert werden. Die Rohdaten selbst werden nicht verändert.</span>
+          <label>Unsere Beobachtung zur Messkurve<textarea id="rawObservation" placeholder="Verlauf, auffällige Einzelwerte, früher/später Bereich, Annäherung an einen Endwert …"></textarea></label>
+          <div class="info"><strong>Leitfragen:</strong> Passt der Verlauf grundsätzlich zur Beobachtung aus Phase 1? Gibt es auffällige Messwerte? Ist der frühe Verlauf ausreichend erfasst? Nähert sich die Kurve am Ende bereits einem nahezu konstanten Wert?</div>
+        </div>
+      </aside>
+      <section class="card">
+        <div class="panelhead"><h2>Reale Messkurve</h2></div>
+        <div class="panelbody">
+          <div class="chartwrap"><canvas class="chart" id="rawAnalysisCanvas" width="900" height="400"></canvas></div>
+          <div class="note" style="margin-top:10px">Hier wird bewusst nur die reale Messreihe gezeigt. Modellkurve und mathematische Transformationen folgen erst in den nächsten Schritten.</div>
+        </div>
+      </section>
+    </div>
   </div>
 
-  <div class="workspace equal">
-    <section class="card">
-      <div class="panelhead"><div class="phase-kicker">Phase 5D</div><h2>Warum „pseudo“ erste Ordnung?</h2></div>
-      <div class="panelbody formgrid">
-        <div class="question">Wie verändert sich k<sub>app</sub>, wenn nur die Hydroxidkonzentration systematisch variiert wird?</div>
-        <div id="ohChecks" class="device-waves"></div>
-        <div class="buttons"><button class="primary" id="runOHSeriesBtn" type="button">Virtuelle OH⁻-Serie auswerten</button></div>
-        <div class="chartwrap"><canvas class="chart" id="ohCanvas" width="900" height="400"></canvas></div>
-        <div class="table-wrap"><table><thead><tr><th>[OH⁻] / mol·L⁻¹</th><th>k<sub>app</sub> / s⁻¹</th><th>R² der ln-Darstellung</th></tr></thead><tbody id="ohTable"><tr class="empty-row"><td colspan="3">Noch keine virtuelle Serie berechnet.</td></tr></tbody></table></div>
-        <div class="info" id="ohFitInfo">Die App liefert Messwerte und Regression, aber keine automatische Formulierung der Reaktionsordnung bezüglich OH⁻.</div>
-      </div>
-    </section>
-    <section class="card">
-      <div class="panelhead"><div class="phase-kicker">Phase 5E</div><h2>War unser Wellenlängenkompromiss relevant?</h2></div>
-      <div class="panelbody formgrid">
-        <div class="question">Verändert die weniger günstige reale Wellenlänge nur das Messsignal – oder auch die kinetische Aussage?</div>
-        <div class="chartwrap"><canvas class="chart" id="waveCompareCanvas" width="900" height="400"></canvas></div>
-        <div id="waveCompareInfo" class="info">Sobald theoretische und reale Wellenlänge festgelegt sind, werden beide virtuellen Läufe verglichen.</div>
-        <div class="buttons"><button class="secondary review-btn" data-review="5" type="button">Ergebnisse zur Besprechung anzeigen</button><button class="secondary" id="exportProtocolBtn" type="button">Arbeitsstand als Markdown exportieren</button></div>
-      </div>
-    </section>
+  <div class="subpane" id="sub5b" hidden>
+    <div class="workspace">
+      <aside class="card">
+        <div class="panelhead"><div class="phase-kicker">Phase 5B</div><h2>Realität und Modell vergleichen</h2></div>
+        <div class="panelbody formgrid">
+          <div class="question">Welche Unterschiede betreffen nur die absolute Absorbanz – und welche den zeitlichen Verlauf?</div>
+          <div class="seg" id="compareModeSeg">
+            <button type="button" data-comparemode="raw" aria-pressed="true">Rohdaten</button>
+            <button type="button" data-comparemode="norm" aria-pressed="false">Normiert</button>
+          </div>
+          <div class="info"><strong>Warum normieren?</strong> Bei der normierten Darstellung werden unterschiedliche Start- und Endwerte weitgehend herausgerechnet. So lässt sich besser vergleichen, ob der zeitliche Verlauf ähnlich ist.</div>
+          <label>Was fällt uns beim Vergleich auf?<textarea id="compareObservation" placeholder="Welche Unterschiede verschwinden durch die Normierung? Welche bleiben bestehen?"></textarea></label>
+        </div>
+      </aside>
+      <section class="card">
+        <div class="panelhead"><h2 id="compareChartTitle">Rohdaten: real und virtuell</h2></div>
+        <div class="panelbody">
+          <div class="chartwrap"><canvas class="chart" id="compareCanvas" width="900" height="400"></canvas></div>
+          <div class="note" style="margin-top:10px">Die virtuelle Kurve ist ein transparentes Modell unter nominal gleichen Bedingungen. Eine exakte Übereinstimmung mit dem Realexperiment ist nicht zu erwarten.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="subpane" id="sub5c" hidden>
+    <div class="workspace">
+      <aside class="card">
+        <div class="panelhead"><div class="phase-kicker">Phase 5C</div><h2>Welche Darstellung wird linear?</h2></div>
+        <div class="panelbody formgrid">
+          <div class="question">Welche mathematische Darstellung lässt sich über den größten Messbereich am besten durch eine Gerade beschreiben?</div>
+          <label>Darstellung<select id="transformSelect"><option id="transformZeroOption" value="zero">A − A∞ gegen t</option><option id="transformFirstOption" value="first">ln(A − A∞) gegen t</option><option id="transformSecondOption" value="second">1/(A − A∞) gegen t</option></select></label>
+          <button class="info-link" id="reactionOrderInfoBtn" type="button">Exkurs: Was hat eine Gerade mit der Reaktionsordnung zu tun?</button>
+          <div class="info" id="fitInfo">Noch keine auswertbare Realdatenreihe vorhanden.</div>
+          <label>Unsere Schlussfolgerung<textarea id="analysisConclusion" placeholder="Welche Darstellung ist am ehesten linear? Welche Reaktionsordnung bezüglich Kristallviolett wird dadurch gestützt – und wie sicher ist die Aussage?"></textarea></label>
+          <div class="warning"><strong>Noch nicht das ganze Geschwindigkeitsgesetz:</strong> Bisher wurde nur untersucht, wie sich die Messgröße für Kristallviolett bei großem OH⁻-Überschuss verhält.</div>
+        </div>
+      </aside>
+      <section class="card">
+        <div class="panelhead"><h2>Eine Darstellung nach der anderen</h2></div>
+        <div class="panelbody">
+          <div class="chartwrap"><canvas class="chart" id="transformCanvas" width="900" height="400"></canvas></div>
+          <div class="note" style="margin-top:10px">Wechselt zwischen den drei Darstellungen. Die App zeigt Regression und R² nur für die aktuell gewählte Darstellung.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="subpane" id="sub5d" hidden>
+    <div class="workspace">
+      <aside class="card">
+        <div class="panelhead"><div class="phase-kicker">Phase 5D</div><h2>Warum „pseudo“ erste Ordnung?</h2></div>
+        <div class="panelbody formgrid">
+          <div class="question">Wie verändert sich k<sub>app</sub>, wenn nur die Hydroxidkonzentration systematisch variiert wird?</div>
+          <div class="info"><strong>Arbeitsweg:</strong> Führt im SpektralLab mehrere virtuelle Messungen unter sonst gleichen Bedingungen durch. Verändert nur c(OH⁻). Bestimmt für jede Messung k<sub>app</sub> aus der Steigung der linearen ln-Darstellung und übertragt die vier Werte hier.</div>
+          <div class="buttons"><a class="secondary linkbtn" href="https://ekerzendorfer.github.io/VIRTUELLES_PHOTOMETER/" target="_blank" rel="noopener">SpektralLab öffnen ↗</a></div>
+          <div class="note">Bei nur vier Werten ist die manuelle Übertragung bewusst vorgesehen: Sie hält sichtbar, welcher k<sub>app</sub>-Wert zu welcher Hydroxidkonzentration gehört.</div>
+          <label>Unsere Schlussfolgerung zu OH⁻<textarea id="ohConclusion" placeholder="Wie hängt k_app von [OH⁻] ab? Welche Reaktionsordnung bezüglich OH⁻ wird dadurch gestützt?"></textarea></label>
+          <div class="teacher-box" data-teacher hidden><strong>Entwicklungswerkzeug</strong><div class="note">Zum Testen von Phase 5D können vorläufige Modellwerte automatisch eingetragen werden. Im SchülerInnenbetrieb werden die Werte im SpektralLab ermittelt.</div><div class="teacher-actions"><button class="secondary" id="fillOHDevBtn" type="button">Entwicklungswerte eintragen</button></div></div>
+        </div>
+      </aside>
+      <section class="card">
+        <div class="panelhead"><h2>k<sub>app</sub> bei verschiedenen [OH⁻]</h2></div>
+        <div class="panelbody formgrid">
+          <div class="table-wrap"><table class="oh-entry-table"><thead><tr><th>[OH⁻] / mol·L⁻¹</th><th>k<sub>app</sub> / s⁻¹ aus dem SpektralLab</th></tr></thead><tbody>
+            <tr><td>0,005</td><td><input data-ohinput="0.005" inputmode="decimal"></td></tr>
+            <tr><td>0,010</td><td><input data-ohinput="0.010" inputmode="decimal"></td></tr>
+            <tr><td>0,020</td><td><input data-ohinput="0.020" inputmode="decimal"></td></tr>
+            <tr><td>0,030</td><td><input data-ohinput="0.030" inputmode="decimal"></td></tr>
+          </tbody></table></div>
+          <div class="chartwrap"><canvas class="chart" id="ohCanvas" width="900" height="400"></canvas></div>
+          <div class="info" id="ohFitInfo">Tragt mindestens zwei k<sub>app</sub>-Werte ein. Mit drei oder vier Werten wird die Aussage belastbarer.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="subpane" id="sub5e" hidden>
+    <div class="workspace">
+      <aside class="card">
+        <div class="panelhead"><div class="phase-kicker">Phase 5E</div><h2>War unser Wellenlängenkompromiss relevant?</h2></div>
+        <div class="panelbody formgrid">
+          <div class="question">Verändert eine weniger günstige Messwellenlänge die Reaktionskinetik – oder zunächst nur die Qualität des gemessenen Signals?</div>
+          <label>Unsere Beurteilung<textarea id="waveConclusion" placeholder="Vergleicht Signalhöhe und den daraus abgeleiteten kinetischen Verlauf."></textarea></label>
+          <div class="info">Damit kehrt ihr zur Entscheidung aus Phase 3A zurück: Eine Messwellenlänge kann für die Signalqualität günstiger oder ungünstiger sein, ohne dass sich die zugrunde liegende chemische Reaktion ändert.</div>
+        </div>
+      </aside>
+      <section class="card">
+        <div class="panelhead"><h2>Vergleich der Wellenlängen</h2></div>
+        <div class="panelbody">
+          <div class="chartwrap"><canvas class="chart" id="waveCompareCanvas" width="900" height="400"></canvas></div>
+          <div id="waveCompareInfo" class="info">Sobald theoretische und reale Wellenlänge festgelegt sind, werden beide virtuellen Läufe verglichen.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="subpane" id="sub5f" hidden>
+    <div class="workspace">
+      <aside class="card">
+        <div class="panelhead"><div class="phase-kicker">Abschluss</div><h2>Unsere Erkenntnis</h2></div>
+        <div class="panelbody formgrid">
+          <div class="question">Formuliert die chemische Aussage jetzt selbst. Nutzt dabei nur Schlussfolgerungen, die ihr aus euren Messungen und Auswertungen begründen könnt.</div>
+          <div class="mini-grid"><label>Reaktionsordnung bezüglich CV⁺<input id="finalCvOrder" placeholder="eigene Formulierung"></label><label>Reaktionsordnung bezüglich OH⁻<input id="finalOhOrder" placeholder="eigene Formulierung"></label></div>
+          <label>Geschwindigkeitsgesetz<input id="finalRateLaw" placeholder="v = …"></label>
+          <label>Welche Beobachtungen und Auswertungen stützen diese Aussage?<textarea id="finalEvidence"></textarea></label>
+          <label>Welche Unsicherheiten oder Einschränkungen bleiben?<textarea id="finalUncertainty"></textarea></label>
+          <div class="buttons"><button class="secondary review-btn" data-review="5" type="button">Erkenntnis zur Besprechung anzeigen</button><button class="secondary" id="exportProtocolBtn" type="button">Arbeitsstand als Markdown exportieren</button></div>
+          <div class="success"><strong>Vom Phänomen zur Gesetzmäßigkeit:</strong> Der Erkenntnisweg begann mit einer sichtbaren Farbänderung und endet mit einer begründeten kinetischen Aussage.</div>
+        </div>
+      </aside>
+      <section class="card">
+        <div class="panelhead"><h2>Erkenntnisweg</h2></div>
+        <div class="panelbody">
+          <div class="step-grid">
+            <div class="step-card"><h3>1 · Beobachten</h3><p>Eine violette Lösung entfärbt sich.</p></div>
+            <div class="step-card"><h3>2 · Messen</h3><p>Die Farbänderung wird als Absorbanz-Zeit-Reihe quantitativ erfasst.</p></div>
+            <div class="step-card"><h3>3 · Darstellen</h3><p>Verschiedene mathematische Darstellungen werden auf Linearität geprüft.</p></div>
+            <div class="step-card"><h3>4 · Variieren</h3><p>Die Hydroxidkonzentration wird systematisch verändert.</p></div>
+            <div class="step-card"><h3>5 · Ableiten</h3><p>Aus beiden Datenreihen wird ein Geschwindigkeitsgesetz begründet.</p></div>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
 </section>
 
@@ -319,8 +436,25 @@
   </div>
 </div>
 
+<div class="review-overlay" id="reactionOrderInfoOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="reactionOrderInfoTitle">
+  <div class="review-card chem-info-card">
+    <div class="review-head"><h2 id="reactionOrderInfoTitle">Exkurs · Reaktionsordnung und lineare Darstellungen</h2><button class="review-close" id="reactionOrderInfoCloseBtn" type="button">Schließen</button></div>
+    <div class="review-body">
+      <p>Eine gekrümmte Konzentrations-Zeit-Kurve kann durch eine geeignete mathematische Darstellung linear werden. Welche Darstellung eine Gerade ergibt, hängt von der <strong>Reaktionsordnung</strong> ab.</p>
+      <div class="step-grid">
+        <div class="step-card"><h3>0. Ordnung</h3><p><strong>c gegen t</strong> ist linear: c = c₀ − kt.</p></div>
+        <div class="step-card"><h3>1. Ordnung</h3><p><strong>ln(c) gegen t</strong> ist linear: ln(c) = ln(c₀) − kt.</p></div>
+        <div class="step-card"><h3>2. Ordnung</h3><p><strong>1/c gegen t</strong> ist linear: 1/c = 1/c₀ + kt.</p></div>
+      </div>
+      <p>Bei unserer photometrischen Messung ist <strong>A − A∞</strong> unter den gewählten Bedingungen proportional zur Konzentration des farbigen Kristallvioletts. Deshalb können wir für die Prüfung der Reaktionsordnung entsprechend A − A∞, ln(A − A∞) und 1/(A − A∞) gegen die Zeit auftragen.</p>
+      <div class="info"><strong>Pseudo-erste Ordnung:</strong> Ist OH⁻ in großem Überschuss vorhanden, ändert sich seine Konzentration während eines einzelnen Versuchs nur wenig. Sein Einfluss steckt dann zunächst in einer scheinbaren Geschwindigkeitskonstanten k<sub>app</sub>. Welche Abhängigkeit k<sub>app</sub> von [OH⁻] besitzt, wird erst in Phase 5D untersucht.</div>
+      <p class="note">Der Exkurs zeigt das mathematische Prinzip, aber nicht, welche Darstellung eure Messdaten tatsächlich am besten beschreibt. Das müsst ihr aus den Diagrammen entscheiden.</p>
+    </div>
+  </div>
+</div>
+
 <div class="footer">
-  <div>KINETIK-LAB v0.1.3 · didaktischer Entwicklungsprototyp · Das Modell ersetzt keine Gefährdungsbeurteilung und keinen realen Laborversuch.</div>
+  <div>KINETIK-LAB v0.1.6 · didaktischer Entwicklungsprototyp · Das Modell ersetzt keine Gefährdungsbeurteilung und keinen realen Laborversuch.</div>
   <div class="footer-tools">
     <button class="footer-link" id="teacherUnlockToggle" type="button">LehrerInnenmodus</button>
     <span class="teacher-unlock-box" id="teacherUnlockBox" hidden>
@@ -334,14 +468,17 @@
 </div>
 <script>
 "use strict";
-const VERSION="0.1.5";
-const STORAGE_KEY="KINETIK_LAB_CV_V014";
-const OLD_STORAGE_KEY="KINETIK_LAB_CV_V013";
+const VERSION="0.1.6";
+const STORAGE_KEY="KINETIK_LAB_CV_V016";
+const OLD_STORAGE_KEY="KINETIK_LAB_CV_V014";
 const PHASE_CODES={2:"2146",3:"3751",4:"4827",5:"5934"};
 const TEACHER_CODE="7319";
 const MODEL={cv0:1.2e-5,oh0:0.03,path:1,lambdaMax:590,epsilonMax:55000,sigma:38,aInfinity:0.015,kObsRef:0.0030,referenceOH:0.03,ohOrder:1};
 const COLORS=["#6d3f86","#345a7d","#a55a2f","#2f7452","#9d3037"];
-const defaultState=()=>({teacher:false,unlocked:1,currentPhase:1,ui:{notation:"A"},p1:{observation:"",hypotheses:"",revealed:false,observationTime:null},p2:{question:"",measure:"",interval:"",duration:"",errors:"",expectation:"",sketch:[]},p3:{sub:"3a",device:"vernier",customWaves:"",theoLambda:"",realLambda:"565",lambdaReason:"",interval:"",duration:"",runs:[],plan:null},p4:{actualLambda:"",actualInterval:"",actualDuration:"",temperature:"",delay:"",notes:"",sourceType:"own",sourceName:"",data:[]},p5:{useDelay:true,aInf:"",transform:"first",conclusion:"",ohSelected:[0.005,0.01,0.02,0.03],ohResults:[]}});
+const defaultState=()=>({teacher:false,unlocked:1,currentPhase:1,ui:{notation:"A"},p1:{observation:"",hypotheses:"",revealed:false,observationTime:null},p2:{question:"",measure:"",interval:"",duration:"",errors:"",expectation:"",sketch:[]},p3:{sub:"3a",device:"vernier",customWaves:"",theoLambda:"",realLambda:"565",lambdaReason:"",interval:"",duration:"",runs:[],plan:null},p4:{actualLambda:"",actualInterval:"",actualDuration:"",temperature:"",delay:"",notes:"",sourceType:"own",sourceName:"",data:[]},p5:{sub:"5a",useDelay:true,aInf:"",compareMode:"raw",transform:"zero",
+rawObservation:"",compareObservation:"",conclusion:"",ohConclusion:"",waveConclusion:"",
+ohManual:{"0.005":"","0.010":"","0.020":"","0.030":""},
+finalCvOrder:"",finalOhOrder:"",finalRateLaw:"",finalEvidence:"",finalUncertainty:""}});
 let state=loadState();
 let scanPoints=[],scanVisible=0,scanRun=0,kinAnim=0,kinCurrent=null,kinVisible=0;
 const $=id=>document.getElementById(id);const $$=sel=>[...document.querySelectorAll(sel)];
@@ -353,7 +490,7 @@ function measureNotation(){return MEASURE_NOTATION[state.ui?.notation==="E"?"E":
 function mName(){return measureNotation().name}function mSymbol(){return measureNotation().symbol}function mInf(){return `${mSymbol()}∞`}function mZero(){return `${mSymbol()}₀`}
 function applyNotation(){document.querySelectorAll('[data-notation="name"]').forEach(el=>el.textContent=mName());document.querySelectorAll('[data-notation="time"]').forEach(el=>el.textContent=`${mSymbol()}(t)`);document.querySelectorAll('[data-notation="inf"]').forEach(el=>el.textContent=mInf());if($("pasteData"))$("pasteData").placeholder=`Zeit_s;${mName()}\n0;0,65\n10;0,62\n...`;if($("transformZeroOption"))$("transformZeroOption").textContent=`${mSymbol()} − ${mInf()} gegen t`;if($("transformFirstOption"))$("transformFirstOption").textContent=`ln(${mSymbol()} − ${mInf()}) gegen t`;if($("transformSecondOption"))$("transformSecondOption").textContent=`1/(${mSymbol()} − ${mInf()}) gegen t`;if($("r2ZeroLabel"))$("r2ZeroLabel").textContent=`${mSymbol()} − ${mInf()}`;if($("r2FirstLabel"))$("r2FirstLabel").textContent=`ln(${mSymbol()} − ${mInf()})`;if($("r2SecondLabel"))$("r2SecondLabel").textContent=`1/(${mSymbol()} − ${mInf()})`}
 function saveState(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));$("saveStatus").textContent="lokal gespeichert"}catch{$("saveStatus").textContent="Speicherung nicht möglich"}}
-function loadState(){try{let raw=localStorage.getItem(STORAGE_KEY),fromOld=false;if(!raw){raw=localStorage.getItem(OLD_STORAGE_KEY);fromOld=!!raw}const x=JSON.parse(raw||"null");if(x&&fromOld&&x.p3&&!x.p3.plan&&!(x.p3.runs||[]).length&&String(x.p3.interval)==="20"&&String(x.p3.duration)==="600"){x.p3.interval="";x.p3.duration=""}const merged=x?mergeState(defaultState(),x):defaultState();if(fromOld)try{localStorage.setItem(STORAGE_KEY,JSON.stringify(merged))}catch{}return merged}catch{return defaultState()}}
+function loadState(){try{let raw=localStorage.getItem(STORAGE_KEY),fromOld=false;if(!raw){raw=localStorage.getItem(OLD_STORAGE_KEY);fromOld=!!raw}const x=JSON.parse(raw||"null");if(x&&fromOld&&x.p3&&!x.p3.plan&&!(x.p3.runs||[]).length&&String(x.p3.interval)==="20"&&String(x.p3.duration)==="600"){x.p3.interval="";x.p3.duration=""}const merged=x?mergeState(defaultState(),x):defaultState();if(fromOld&&x?.p5&&!Object.prototype.hasOwnProperty.call(x.p5,"sub")){merged.p5.sub="5a";merged.p5.transform="zero";merged.p5.compareMode="raw"}if(fromOld)try{localStorage.setItem(STORAGE_KEY,JSON.stringify(merged))}catch{}return merged}catch{return defaultState()}}
 function mergeState(base,src){for(const k of Object.keys(base)){if(src&&Object.prototype.hasOwnProperty.call(src,k)){if(base[k]&&typeof base[k]==="object"&&!Array.isArray(base[k])&&src[k]&&typeof src[k]==="object"&&!Array.isArray(src[k]))base[k]=mergeState(base[k],src[k]);else base[k]=src[k]}}return base}
 function download(name,text,type="text/plain;charset=utf-8"){const blob=new Blob([text],{type}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 function phaseName(n){return["","Beobachten","Planen","Virtuell erproben","Real messen","Auswerten"][n]}
@@ -453,26 +590,118 @@ function linreg(points){const pts=points.filter(p=>Number.isFinite(p.x)&&Number.
 function correctedReal(){const delay=state.p5.useDelay?Number(state.p4.delay||0):0;return(state.p4.data||[]).map(p=>({time:p.time+delay,absorbance:p.absorbance}))}
 function currentAInf(){const n=Number(state.p5.aInf);return Number.isFinite(n)?n:0}
 function virtualAtTimes(real){if(!real.length)return[];const lambda=Number(state.p4.actualLambda||state.p3.plan?.realLambda||590),a0=absorbAt(lambda),ainf=Math.min(MODEL.aInfinity,a0*.08),k=kobs(MODEL.oh0);return real.map(p=>({time:p.time,absorbance:ainf+(a0-ainf)*Math.exp(-k*p.time)}))}
-function renderPhase5(){state.p5.useDelay=$("useDelay")?$("useDelay").checked:state.p5.useDelay;if($("aInfInput"))$("aInfInput").value=state.p5.aInf;if($("analysisConclusion"))$("analysisConclusion").value=state.p5.conclusion;if($("transformSelect"))$("transformSelect").value=state.p5.transform||"first";renderComparison();renderTransforms();renderOHChecks();renderOHResults();drawWaveCompare()}
-function renderComparison(){const real=correctedReal(),virt=virtualAtTimes(real);drawMulti($("overlayCanvas"),real.length?[{label:"real",color:"#6d3f86",points:real.map(p=>({x:p.time,y:p.absorbance}))},{label:"virtuelles Modell",color:"#345a7d",dash:[8,5],dots:false,points:virt.map(p=>({x:p.time,y:p.absorbance}))}]:[],{xlabel:"Zeit seit Reaktionsbeginn / s",ylabel:`${mName()} ${mSymbol()}`,empty:"Noch keine Realdaten."});if(!real.length){drawMulti($("normCanvas"),[],{empty:"Noch keine Realdaten."});return}const ar=currentAInf(),r0=real[0].absorbance,vInf=Math.min(MODEL.aInfinity,absorbAt(Number(state.p4.actualLambda||590))*.08),v0=virt[0]?.absorbance||1,nr=real.map(p=>({x:p.time,y:(p.absorbance-ar)/Math.max(1e-12,r0-ar)})),nv=virt.map(p=>({x:p.time,y:(p.absorbance-vInf)/Math.max(1e-12,v0-vInf)}));drawMulti($("normCanvas"),[{label:"real normiert",color:"#6d3f86",points:nr},{label:"virtuell normiert",color:"#345a7d",dash:[8,5],dots:false,points:nv}],{xlabel:"Zeit / s",ylabel:`normierte ${mName()}`,empty:"Noch keine Daten"})}
+function showSub5(which){state.p5.sub=which;$$('[data-sub5]').forEach(b=>b.classList.toggle("active",b.dataset.sub5===which));["5a","5b","5c","5d","5e","5f"].forEach(id=>{$("sub"+id).hidden=id!==which});if(which==="5a"||which==="5b")renderComparison();if(which==="5c")renderTransforms();if(which==="5d")renderOHResults();if(which==="5e")drawWaveCompare();saveState()}
+function renderPhase5(){if($("useDelay"))$("useDelay").checked=state.p5.useDelay;if($("aInfInput"))$("aInfInput").value=state.p5.aInf;if($("rawObservation"))$("rawObservation").value=state.p5.rawObservation||"";if($("compareObservation"))$("compareObservation").value=state.p5.compareObservation||"";if($("analysisConclusion"))$("analysisConclusion").value=state.p5.conclusion||"";if($("ohConclusion"))$("ohConclusion").value=state.p5.ohConclusion||"";if($("waveConclusion"))$("waveConclusion").value=state.p5.waveConclusion||"";if($("transformSelect"))$("transformSelect").value=state.p5.transform||"zero";["finalCvOrder","finalOhOrder","finalRateLaw","finalEvidence","finalUncertainty"].forEach(id=>{if($(id))$(id).value=state.p5[id]||""});$$('[data-ohinput]').forEach(inp=>{inp.value=state.p5.ohManual?.[inp.dataset.ohinput]??""});setCompareMode(state.p5.compareMode||"raw",false);renderComparison();renderTransforms();renderOHResults();drawWaveCompare();showSub5(state.p5.sub||"5a")}
+function renderComparison(){const real=correctedReal(),virt=virtualAtTimes(real);drawMulti($("rawAnalysisCanvas"),real.length?[{label:"reale Messwerte",color:"#6d3f86",points:real.map(p=>({x:p.time,y:p.absorbance}))}]:[],{xlabel:"Zeit seit Reaktionsbeginn / s",ylabel:`${mName()} ${mSymbol()}`,empty:"Noch keine Realdaten."});if(!real.length){drawMulti($("compareCanvas"),[],{empty:"Noch keine Realdaten."});return}const mode=state.p5.compareMode||"raw";if(mode==="norm"){const ar=currentAInf(),r0=real[0].absorbance,vInf=Math.min(MODEL.aInfinity,absorbAt(Number(state.p4.actualLambda||590))*.08),v0=virt[0]?.absorbance||1,nr=real.map(p=>({x:p.time,y:(p.absorbance-ar)/Math.max(1e-12,r0-ar)})),nv=virt.map(p=>({x:p.time,y:(p.absorbance-vInf)/Math.max(1e-12,v0-vInf)}));drawMulti($("compareCanvas"),[{label:"real normiert",color:"#6d3f86",points:nr},{label:"virtuell normiert",color:"#345a7d",dash:[8,5],dots:false,points:nv}],{xlabel:"Zeit / s",ylabel:`normierte ${mName()}`,empty:"Noch keine Daten"});$("compareChartTitle").textContent="Normierter Verlauf: real und virtuell"}else{drawMulti($("compareCanvas"),[{label:"real",color:"#6d3f86",points:real.map(p=>({x:p.time,y:p.absorbance}))},{label:"virtuelles Modell",color:"#345a7d",dash:[8,5],dots:false,points:virt.map(p=>({x:p.time,y:p.absorbance}))}],{xlabel:"Zeit seit Reaktionsbeginn / s",ylabel:`${mName()} ${mSymbol()}`,empty:"Noch keine Realdaten."});$("compareChartTitle").textContent="Rohdaten: real und virtuell"}}
+function setCompareMode(mode,save=true){state.p5.compareMode=mode==="norm"?"norm":"raw";$$('[data-comparemode]').forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.comparemode===state.p5.compareMode)));if(save){renderComparison();saveState()}}
 function transformPoints(kind){const ainf=currentAInf();return correctedReal().map(p=>{const d=p.absorbance-ainf;if(kind==="zero")return{x:p.time,y:d};if(d<=Math.max(1e-8,Math.abs(ainf)*.01))return null;if(kind==="first")return{x:p.time,y:Math.log(d)};return{x:p.time,y:1/d}}).filter(Boolean)}
-function renderTransforms(){const kinds=["zero","first","second"],fits=Object.fromEntries(kinds.map(k=>[k,linreg(transformPoints(k))]));$("r2Zero").textContent=fits.zero?fmtFixed(fits.zero.r2,5):"–";$("r2First").textContent=fits.first?fmtFixed(fits.first.r2,5):"–";$("r2Second").textContent=fits.second?fmtFixed(fits.second.r2,5):"–";const kind=state.p5.transform||"first",pts=transformPoints(kind),fit=fits[kind],labels={zero:`${mSymbol()} − ${mInf()}`,first:`ln(${mSymbol()} − ${mInf()})`,second:`1/(${mSymbol()} − ${mInf()})`};drawSimpleSeries($("transformCanvas"),pts,{xlabel:"Zeit / s",ylabel:labels[kind],empty:"Noch keine auswertbaren Realdaten.",fit});if(fit){const extra=kind==="first"?` · k_app aus der Steigung: ${fmtFixed(-fit.slope,6)} s⁻¹`:"";$("fitInfo").innerHTML=`<strong>Lineare Regression:</strong> y = ${fmtFixed(fit.slope,6)} · t + ${fmtFixed(fit.intercept,5)}; R² = ${fmtFixed(fit.r2,5)}${extra}. <br><span class="note">Die App nennt daraus nicht automatisch die Reaktionsordnung.</span>`}else $("fitInfo").textContent="Noch keine auswertbare Realdatenreihe vorhanden."}
-function renderOHChecks(){const vals=[0.005,0.010,0.020,0.030];$("ohChecks").innerHTML=vals.map(v=>`<label class="wave-chip" style="display:flex;align-items:center;gap:6px"><input style="width:auto" type="checkbox" data-oh="${v}" ${state.p5.ohSelected.includes(v)?"checked":""}>${v.toFixed(3).replace(".",",")} M</label>`).join("");$$('[data-oh]').forEach(cb=>cb.addEventListener("change",()=>{state.p5.ohSelected=$$('[data-oh]:checked').map(x=>Number(x.dataset.oh));saveState()}))}
-function runOHSeries(){const lambda=Number(state.p4.actualLambda||state.p3.plan?.realLambda||590),selected=state.p5.ohSelected.length?state.p5.ohSelected:[.005,.01,.02,.03],results=[];selected.forEach((oh,idx)=>{const run=makeKineticRun({lambda,interval:10,duration:600,oh,noiseScale:.65}),pts=run.points.filter(p=>p.absorbance>run.ainf+.004).map(p=>({x:p.time,y:Math.log(p.absorbance-run.ainf)})),fit=linreg(pts);if(fit)results.push({oh,kapp:-fit.slope,r2:fit.r2})});state.p5.ohResults=results;renderOHResults();saveState()}
-function renderOHResults(){const r=state.p5.ohResults||[];$("ohTable").innerHTML=r.length?r.map(x=>`<tr><td>${x.oh.toFixed(3).replace(".",",")}</td><td>${fmtFixed(x.kapp,6)}</td><td>${fmtFixed(x.r2,5)}</td></tr>`).join(""):'<tr class="empty-row"><td colspan="3">Noch keine virtuelle Serie berechnet.</td></tr>';const pts=r.map(x=>({x:x.oh,y:x.kapp})),fit=linreg(pts);drawSimpleSeries($("ohCanvas"),pts,{xlabel:"[OH⁻] / mol·L⁻¹",ylabel:"k_app / s⁻¹",empty:"Noch keine virtuelle OH⁻-Serie.",fit,color:"#345a7d"});$("ohFitInfo").innerHTML=fit?`<strong>Regression k_app gegen [OH⁻]:</strong> Steigung = ${fmtFixed(fit.slope,5)} L·mol⁻¹·s⁻¹; Achsenabschnitt = ${fmtFixed(fit.intercept,6)} s⁻¹; R² = ${fmtFixed(fit.r2,5)}.<br><span class="note">Welche Reaktionsordnung bezüglich OH⁻ daraus folgt, muss begründet werden.</span>`:"Die App liefert Messwerte und Regression, aber keine automatische Formulierung der Reaktionsordnung bezüglich OH⁻."}
-function drawWaveCompare(){if(!$("waveCompareCanvas"))return;const theo=Number(state.p3.theoLambda)||MODEL.lambdaMax,real=Number(state.p4.actualLambda||state.p3.realLambda);if(!Number.isFinite(real)){drawMulti($("waveCompareCanvas"),[],{empty:"Noch keine reale Wellenlänge festgelegt."});return}const duration=Number(state.p3.plan?.duration||600),interval=20,r1=makeKineticRun({lambda:theo,interval,duration,noiseScale:.45}),r2=makeKineticRun({lambda:real,interval,duration,noiseScale:.45});drawMulti($("waveCompareCanvas"),[{label:`theoretisch ${Math.round(theo)} nm`,color:"#345a7d",points:r1.points.map(p=>({x:p.time,y:p.absorbance}))},{label:`real ${Math.round(real)} nm`,color:"#a55a2f",points:r2.points.map(p=>({x:p.time,y:p.absorbance}))}],{xlabel:"Zeit / s",ylabel:`${mName()} ${mSymbol()}`,empty:"Noch keine Wellenlängen festgelegt."});const f1=linreg(r1.points.filter(p=>p.absorbance>r1.ainf+.004).map(p=>({x:p.time,y:Math.log(p.absorbance-r1.ainf)}))),f2=linreg(r2.points.filter(p=>p.absorbance>r2.ainf+.004).map(p=>({x:p.time,y:Math.log(p.absorbance-r2.ainf)})));$("waveCompareInfo").innerHTML=`<strong>${Math.round(theo)} nm:</strong> A₀ ≈ ${fmtFixed(r1.a0,3)}, k_app ≈ ${f1?fmtFixed(-f1.slope,5):"–"} s⁻¹ · <strong>${Math.round(real)} nm:</strong> A₀ ≈ ${fmtFixed(r2.a0,3)}, k_app ≈ ${f2?fmtFixed(-f2.slope,5):"–"} s⁻¹.<br><span class="note">Beurteilt selbst, ob der Wellenlängenkompromiss die kinetische Aussage signifikant verändert.</span>`}
+function renderTransforms(){const kind=state.p5.transform||"zero",pts=transformPoints(kind),fit=linreg(pts),labels={zero:`${mSymbol()} − ${mInf()}`,first:`ln(${mSymbol()} − ${mInf()})`,second:`1/(${mSymbol()} − ${mInf()})`};drawSimpleSeries($("transformCanvas"),pts,{xlabel:"Zeit / s",ylabel:labels[kind],empty:"Noch keine auswertbaren Realdaten.",fit});if(fit){const extra=kind==="first"?` · aus der Steigung folgt k_app = ${fmtFixed(-fit.slope,6)} s⁻¹`:"";$("fitInfo").innerHTML=`<strong>Aktuelle Darstellung:</strong> R² = ${fmtFixed(fit.r2,5)}; Steigung = ${fmtFixed(fit.slope,6)}${extra}.<br><span class="note">Wechselt zu den anderen Darstellungen und vergleicht selbst, welche am ehesten linear ist.</span>`}else $("fitInfo").textContent="Noch keine auswertbare Realdatenreihe vorhanden."}
+function parseLocaleNumber(v){const n=Number(String(v??"").trim().replace(",","."));return Number.isFinite(n)?n:null}
+function manualOHResults(){return Object.entries(state.p5.ohManual||{}).map(([oh,val])=>({oh:Number(oh),kapp:parseLocaleNumber(val)})).filter(x=>Number.isFinite(x.kapp)&&x.kapp>0).sort((a,b)=>a.oh-b.oh)}
+function renderOHResults(){$$('[data-ohinput]').forEach(inp=>{const v=state.p5.ohManual?.[inp.dataset.ohinput]??"";if(document.activeElement!==inp)inp.value=v});const r=manualOHResults(),pts=r.map(x=>({x:x.oh,y:x.kapp})),fit=linreg(pts);drawSimpleSeries($("ohCanvas"),pts,{xlabel:"[OH⁻] / mol·L⁻¹",ylabel:"k_app / s⁻¹",empty:"Noch keine k_app-Werte eingetragen.",fit,color:"#345a7d"});if(fit)$("ohFitInfo").innerHTML=`<strong>Regression k_app gegen [OH⁻]:</strong> Steigung = ${fmtFixed(fit.slope,5)} L·mol⁻¹·s⁻¹; Achsenabschnitt = ${fmtFixed(fit.intercept,6)} s⁻¹; R² = ${fmtFixed(fit.r2,5)}.<br><span class="note">Welche Reaktionsordnung bezüglich OH⁻ daraus folgt, müsst ihr aus dem Zusammenhang begründen.</span>`;else $("ohFitInfo").innerHTML=`Tragt mindestens zwei k<sub>app</sub>-Werte ein. Mit drei oder vier Werten wird die Aussage belastbarer.`}
+function fillOHDevelopment(){const vals=[.005,.010,.020,.030],obj={};vals.forEach(oh=>{const run=makeKineticRun({lambda:Number(state.p4.actualLambda||state.p3.plan?.realLambda||590),interval:10,duration:900,oh,noiseScale:.35}),pts=run.points.filter(p=>p.absorbance>run.ainf+.004).map(p=>({x:p.time,y:Math.log(p.absorbance-run.ainf)})),fit=linreg(pts);obj[oh.toFixed(3)]=fit?String((-fit.slope).toFixed(6)).replace(".",","):""});state.p5.ohManual=obj;renderOHResults();saveState()}
+function drawWaveCompare(){if(!$("waveCompareCanvas"))return;const theo=Number(state.p3.theoLambda)||MODEL.lambdaMax,real=Number(state.p4.actualLambda||state.p3.realLambda);if(!Number.isFinite(real)){drawMulti($("waveCompareCanvas"),[],{empty:"Noch keine reale Wellenlänge festgelegt."});return}const duration=Number(state.p3.plan?.duration||600),interval=20,r1=makeKineticRun({lambda:theo,interval,duration,noiseScale:.45}),r2=makeKineticRun({lambda:real,interval,duration,noiseScale:.45});drawMulti($("waveCompareCanvas"),[{label:`theoretisch ${Math.round(theo)} nm`,color:"#345a7d",points:r1.points.map(p=>({x:p.time,y:p.absorbance}))},{label:`real ${Math.round(real)} nm`,color:"#a55a2f",points:r2.points.map(p=>({x:p.time,y:p.absorbance}))}],{xlabel:"Zeit / s",ylabel:`${mName()} ${mSymbol()}`,empty:"Noch keine Wellenlängen festgelegt."});const f1=linreg(r1.points.filter(p=>p.absorbance>r1.ainf+.004).map(p=>({x:p.time,y:Math.log(p.absorbance-r1.ainf)}))),f2=linreg(r2.points.filter(p=>p.absorbance>r2.ainf+.004).map(p=>({x:p.time,y:Math.log(p.absorbance-r2.ainf)})));$("waveCompareInfo").innerHTML=`<strong>${Math.round(theo)} nm:</strong> A₀ ≈ ${fmtFixed(r1.a0,3)}, k_app ≈ ${f1?fmtFixed(-f1.slope,5):"–"} s⁻¹ · <strong>${Math.round(real)} nm:</strong> A₀ ≈ ${fmtFixed(r2.a0,3)}, k_app ≈ ${f2?fmtFixed(-f2.slope,5):"–"} s⁻¹.<br><span class="note">Beurteilt selbst, ob der Wellenlängenkompromiss die kinetische Aussage wesentlich verändert.</span>`}
 function esc(s){return String(s??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]))}
 function reviewItem(label,value,wide=false){const text=String(value??"").trim()||"—";return `<div class="review-item ${wide?"wide":""}"><span>${esc(label)}</span><div>${esc(text)}</div></div>`}
 let currentReviewPhase=null;
-function reviewPlainText(phase){const p=state.p3.plan||{},fit=phase===5?linreg(transformPoints("first")):null,lines=[`KINETIK-LAB – Phase ${phase}: ${phaseName(phase)}`,""];if(phase===2){lines.push(`Forschungsfrage: ${state.p2.question||"—"}`,`Messgröße und Begründung: ${state.p2.measure||"—"}`,`Erste Schätzung Messintervall: ${state.p2.interval?state.p2.interval+" s":"—"}`,`Erste Schätzung Messdauer: ${state.p2.duration?state.p2.duration+" s":"—"}`,`Erwarteter Kurvenverlauf – Begründung: ${state.p2.expectation||"—"}`,`Mögliche Fehler- oder Störquellen: ${state.p2.errors||"—"}`,`Kurvenskizze: ${(state.p2.sketch||[]).length?"vorhanden":"noch nicht gezeichnet"}`)}else if(phase===3){lines.push(`Theoretisch günstige Wellenlänge: ${state.p3.theoLambda?state.p3.theoLambda+" nm":"—"}`,`Reale Wellenlänge: ${(p.realLambda||state.p3.realLambda)?(p.realLambda||state.p3.realLambda)+" nm":"—"}`,`Begründung der Wellenlängenwahl: ${state.p3.lambdaReason||"—"}`,`Messintervall: ${(p.interval||state.p3.interval)} s`,`Messdauer: ${(p.duration||state.p3.duration)} s`,`Erwartete Messpunkte: ${p.points??Math.floor(Number(state.p3.duration)/Number(state.p3.interval))+1}`,`Virtuelle Testläufe: ${(state.p3.runs||[]).length}`)}else if(phase===4){lines.push(`Datenquelle: ${sourceTypeLabel(state.p4.sourceType)}${state.p4.sourceName?" · "+state.p4.sourceName:""}`,`Tatsächliche Wellenlänge: ${state.p4.actualLambda?state.p4.actualLambda+" nm":"—"}`,`Messintervall: ${state.p4.actualInterval?state.p4.actualInterval+" s":"—"}`,`Messdauer: ${state.p4.actualDuration?state.p4.actualDuration+" s":"—"}`,`Temperatur: ${state.p4.temperature?state.p4.temperature+" °C":"—"}`,`Startverzögerung: ${state.p4.delay?state.p4.delay+" s":"—"}`,`Messwerte: ${(state.p4.data||[]).length}`,`Abweichungen / Beobachtungen: ${state.p4.notes||"—"}`)}else if(phase===5){lines.push(`Verwendetes ${mInf()}: ${state.p5.aInf||"—"}`,`k_app aus ln(${mSymbol()}−${mInf()}): ${fit?fmtFixed(-fit.slope,6)+" s⁻¹":"—"}`,`R²: ${fit?fmtFixed(fit.r2,5):"—"}`,`Virtuelle OH⁻-Läufe: ${(state.p5.ohResults||[]).length}`,`Schlussfolgerung: ${state.p5.conclusion||"—"}`)}return lines.join("\n")}
-function openReview(phase){let html="",title=`Phase ${phase} · Ergebnisse zur Besprechung`;currentReviewPhase=phase;$("reviewCopyStatus").textContent="";if(phase===2){html=`<div class="review-grid">${reviewItem("Forschungsfrage",state.p2.question,true)}${reviewItem("Messgröße und Begründung",state.p2.measure,true)}${reviewItem("erste Schätzung Messintervall",state.p2.interval?state.p2.interval+" s":"—")}${reviewItem("erste Schätzung Messdauer",state.p2.duration?state.p2.duration+" s":"—")}${reviewItem("erwarteter Kurvenverlauf – Begründung",state.p2.expectation,true)}${reviewItem("mögliche Fehler- oder Störquellen",state.p2.errors,true)}${reviewItem("Kurvenskizze",(state.p2.sketch||[]).length?"vorhanden":"noch nicht gezeichnet")}</div>`}else if(phase===3){const p=state.p3.plan||{};html=`<div class="review-grid">${reviewItem("theoretisch günstige Wellenlänge",state.p3.theoLambda?state.p3.theoLambda+" nm":"—")}${reviewItem("reale Wellenlänge",(p.realLambda||state.p3.realLambda)?(p.realLambda||state.p3.realLambda)+" nm":"—")}${reviewItem("Begründung der Wellenlängenwahl",state.p3.lambdaReason,true)}${reviewItem("Messintervall",(p.interval||state.p3.interval)+" s")}${reviewItem("Messdauer",(p.duration||state.p3.duration)+" s")}${reviewItem("erwartete Messpunkte",p.points??Math.floor(Number(state.p3.duration)/Number(state.p3.interval))+1)}${reviewItem("virtuelle Testläufe",(state.p3.runs||[]).length)}</div>`}else if(phase===4){html=`<div class="review-grid">${reviewItem("Datenquelle",`${sourceTypeLabel(state.p4.sourceType)}${state.p4.sourceName?" · "+state.p4.sourceName:""}`,true)}${reviewItem("tatsächliche Wellenlänge",state.p4.actualLambda?state.p4.actualLambda+" nm":"—")}${reviewItem("Messintervall",state.p4.actualInterval?state.p4.actualInterval+" s":"—")}${reviewItem("Messdauer",state.p4.actualDuration?state.p4.actualDuration+" s":"—")}${reviewItem("Temperatur",state.p4.temperature?state.p4.temperature+" °C":"—")}${reviewItem("Startverzögerung",state.p4.delay?state.p4.delay+" s":"—")}${reviewItem("Messwerte",(state.p4.data||[]).length)}${reviewItem("Abweichungen / Beobachtungen",state.p4.notes,true)}</div>`}else if(phase===5){const fit=linreg(transformPoints("first"));html=`<div class="review-grid">${reviewItem(`verwendetes ${mInf()}`,state.p5.aInf||"—")}${reviewItem(`k_app aus ln(${mSymbol()}−${mInf()})`,fit?fmtFixed(-fit.slope,6)+" s⁻¹":"—")}${reviewItem("R²",fit?fmtFixed(fit.r2,5):"—")}${reviewItem("virtuelle OH⁻-Läufe",(state.p5.ohResults||[]).length)}${reviewItem("Schlussfolgerung",state.p5.conclusion,true)}</div>`}else return;$("reviewTitle").textContent=title;$("reviewBody").innerHTML=html;$("reviewOverlay").hidden=false;$("reviewCloseBtn").focus()}
+function reviewPlainText(phase){const p=state.p3.plan||{},fit=phase===5?linreg(transformPoints("first")):null,lines=[`KINETIK-LAB – Phase ${phase}: ${phaseName(phase)}`,""];if(phase===2){lines.push(`Forschungsfrage: ${state.p2.question||"—"}`,`Messgröße und Begründung: ${state.p2.measure||"—"}`,`Erste Schätzung Messintervall: ${state.p2.interval?state.p2.interval+" s":"—"}`,`Erste Schätzung Messdauer: ${state.p2.duration?state.p2.duration+" s":"—"}`,`Erwarteter Kurvenverlauf – Begründung: ${state.p2.expectation||"—"}`,`Mögliche Fehler- oder Störquellen: ${state.p2.errors||"—"}`,`Kurvenskizze: ${(state.p2.sketch||[]).length?"vorhanden":"noch nicht gezeichnet"}`)}else if(phase===3){lines.push(`Theoretisch günstige Wellenlänge: ${state.p3.theoLambda?state.p3.theoLambda+" nm":"—"}`,`Reale Wellenlänge: ${(p.realLambda||state.p3.realLambda)?(p.realLambda||state.p3.realLambda)+" nm":"—"}`,`Begründung der Wellenlängenwahl: ${state.p3.lambdaReason||"—"}`,`Messintervall: ${(p.interval||state.p3.interval)} s`,`Messdauer: ${(p.duration||state.p3.duration)} s`,`Erwartete Messpunkte: ${p.points??Math.floor(Number(state.p3.duration)/Number(state.p3.interval))+1}`,`Virtuelle Testläufe: ${(state.p3.runs||[]).length}`)}else if(phase===4){lines.push(`Datenquelle: ${sourceTypeLabel(state.p4.sourceType)}${state.p4.sourceName?" · "+state.p4.sourceName:""}`,`Tatsächliche Wellenlänge: ${state.p4.actualLambda?state.p4.actualLambda+" nm":"—"}`,`Messintervall: ${state.p4.actualInterval?state.p4.actualInterval+" s":"—"}`,`Messdauer: ${state.p4.actualDuration?state.p4.actualDuration+" s":"—"}`,`Temperatur: ${state.p4.temperature?state.p4.temperature+" °C":"—"}`,`Startverzögerung: ${state.p4.delay?state.p4.delay+" s":"—"}`,`Messwerte: ${(state.p4.data||[]).length}`,`Abweichungen / Beobachtungen: ${state.p4.notes||"—"}`)}else if(phase===5){const oh=manualOHResults();lines.push(`Beobachtung Rohdaten: ${state.p5.rawObservation||"—"}`,`Real/Modell-Vergleich: ${state.p5.compareObservation||"—"}`,`Schlussfolgerung Reaktionsordnung CV⁺: ${state.p5.conclusion||"—"}`,`k_app aus ln(${mSymbol()}−${mInf()}): ${fit?fmtFixed(-fit.slope,6)+" s⁻¹":"—"}`,`Übertragene k_app-Werte: ${oh.length}`,`Schlussfolgerung OH⁻: ${state.p5.ohConclusion||"—"}`,`Wellenlängenbeurteilung: ${state.p5.waveConclusion||"—"}`,`Reaktionsordnung CV⁺: ${state.p5.finalCvOrder||"—"}`,`Reaktionsordnung OH⁻: ${state.p5.finalOhOrder||"—"}`,`Geschwindigkeitsgesetz: ${state.p5.finalRateLaw||"—"}`,`Begründung: ${state.p5.finalEvidence||"—"}`,`Unsicherheiten: ${state.p5.finalUncertainty||"—"}`)}return lines.join("\n")}
+function openReview(phase){let html="",title=`Phase ${phase} · Ergebnisse zur Besprechung`;currentReviewPhase=phase;$("reviewCopyStatus").textContent="";if(phase===2){html=`<div class="review-grid">${reviewItem("Forschungsfrage",state.p2.question,true)}${reviewItem("Messgröße und Begründung",state.p2.measure,true)}${reviewItem("erste Schätzung Messintervall",state.p2.interval?state.p2.interval+" s":"—")}${reviewItem("erste Schätzung Messdauer",state.p2.duration?state.p2.duration+" s":"—")}${reviewItem("erwarteter Kurvenverlauf – Begründung",state.p2.expectation,true)}${reviewItem("mögliche Fehler- oder Störquellen",state.p2.errors,true)}${reviewItem("Kurvenskizze",(state.p2.sketch||[]).length?"vorhanden":"noch nicht gezeichnet")}</div>`}else if(phase===3){const p=state.p3.plan||{};html=`<div class="review-grid">${reviewItem("theoretisch günstige Wellenlänge",state.p3.theoLambda?state.p3.theoLambda+" nm":"—")}${reviewItem("reale Wellenlänge",(p.realLambda||state.p3.realLambda)?(p.realLambda||state.p3.realLambda)+" nm":"—")}${reviewItem("Begründung der Wellenlängenwahl",state.p3.lambdaReason,true)}${reviewItem("Messintervall",(p.interval||state.p3.interval)+" s")}${reviewItem("Messdauer",(p.duration||state.p3.duration)+" s")}${reviewItem("erwartete Messpunkte",p.points??Math.floor(Number(state.p3.duration)/Number(state.p3.interval))+1)}${reviewItem("virtuelle Testläufe",(state.p3.runs||[]).length)}</div>`}else if(phase===4){html=`<div class="review-grid">${reviewItem("Datenquelle",`${sourceTypeLabel(state.p4.sourceType)}${state.p4.sourceName?" · "+state.p4.sourceName:""}`,true)}${reviewItem("tatsächliche Wellenlänge",state.p4.actualLambda?state.p4.actualLambda+" nm":"—")}${reviewItem("Messintervall",state.p4.actualInterval?state.p4.actualInterval+" s":"—")}${reviewItem("Messdauer",state.p4.actualDuration?state.p4.actualDuration+" s":"—")}${reviewItem("Temperatur",state.p4.temperature?state.p4.temperature+" °C":"—")}${reviewItem("Startverzögerung",state.p4.delay?state.p4.delay+" s":"—")}${reviewItem("Messwerte",(state.p4.data||[]).length)}${reviewItem("Abweichungen / Beobachtungen",state.p4.notes,true)}</div>`}else if(phase===5){const fit=linreg(transformPoints("first")),oh=manualOHResults();html=`<div class="review-grid">${reviewItem("Reaktionsordnung bezüglich CV⁺",state.p5.finalCvOrder||"—")}${reviewItem("Reaktionsordnung bezüglich OH⁻",state.p5.finalOhOrder||"—")}${reviewItem("Geschwindigkeitsgesetz",state.p5.finalRateLaw||"—",true)}${reviewItem(`k_app aus ln(${mSymbol()}−${mInf()})`,fit?fmtFixed(-fit.slope,6)+" s⁻¹":"—")}${reviewItem("übertragene k_app-Werte",oh.length)}${reviewItem("Begründung / Evidenz",state.p5.finalEvidence||"—",true)}${reviewItem("Unsicherheiten / Einschränkungen",state.p5.finalUncertainty||"—",true)}</div>`}else return;$("reviewTitle").textContent=title;$("reviewBody").innerHTML=html;$("reviewOverlay").hidden=false;$("reviewCloseBtn").focus()}
 function fallbackCopy(text){const ta=document.createElement("textarea");ta.value=text;ta.setAttribute("readonly","");ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();let ok=false;try{ok=document.execCommand("copy")}catch{}ta.remove();return ok}
 async function copyReview(){if(!currentReviewPhase)return;const txt=reviewPlainText(currentReviewPhase);let ok=false;try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(txt);ok=true}else ok=fallbackCopy(txt)}catch{ok=fallbackCopy(txt)}$("reviewCopyStatus").textContent=ok?"In die Zwischenablage kopiert.":"Kopieren nicht möglich – bitte Text markieren."}
 function closeReview(){$("reviewOverlay").hidden=true;currentReviewPhase=null}
-function protocolMarkdown(){const p=state.p3.plan||{},data=state.p4.data||[],fit=linreg(transformPoints("first"));return `# KINETIK-LAB – Das schlecht ausgespülte Becherglas\n\n- App-Version: ${VERSION}\n- Export: ${new Date().toLocaleString("de-DE")}\n\n## Phase 1 – Beobachtung\n\n${state.p1.observation||"(nicht eingetragen)"}\n\n**Simulierte Beobachtungszeit bis zur weitgehenden Entfärbung:** ${state.p1.observationTime!==null?fmtFixed(state.p1.observationTime,1)+" s":"–"}\n\n### Hypothesen\n\n${state.p1.hypotheses||"(nicht eingetragen)"}\n\n## Phase 2 – Forschungsfrage und Messplan\n\n**Forschungsfrage:** ${state.p2.question||"–"}\n\n**Idee zur quantitativen Erfassung:** ${state.p2.measure||"–"}\n\n**Erste Schätzung Messintervall:** ${state.p2.interval?state.p2.interval+" s":"–"}\n\n**Erste Schätzung Messdauer:** ${state.p2.duration?state.p2.duration+" s":"–"}\n\n**Erwartung:** ${state.p2.expectation||"–"}\n\n**Mögliche Fehlerquellen:** ${state.p2.errors||"–"}\n\n## Phase 3 – Virtueller Messplan\n\n- theoretisch gewählte Wellenlänge: ${p.theoLambda??"–"} nm\n- reale Wellenlänge: ${p.realLambda??"–"} nm\n- Messintervall: ${p.interval??"–"} s\n- Messdauer: ${p.duration??"–"} s\n- erwartete Messpunkte: ${p.points??"–"}\n\n## Phase 4 – Reales Experiment\n\n- Datenquelle: ${sourceTypeLabel(state.p4.sourceType)}${state.p4.sourceName?" · "+state.p4.sourceName:""}\n- tatsächliche Wellenlänge: ${state.p4.actualLambda||"–"} nm\n- Temperatur: ${state.p4.temperature||"–"} °C\n- Startverzögerung: ${state.p4.delay||"–"} s\n- Messwerte: ${data.length}\n- Abweichungen: ${state.p4.notes||"–"}\n\n## Phase 5 – Auswertung\n\n- verwendetes ${mInf()}: ${state.p5.aInf||"–"}\n- ln-Fit k_app: ${fit?fmtFixed(-fit.slope,6)+" s⁻¹":"–"}\n- ln-Fit R²: ${fit?fmtFixed(fit.r2,5):"–"}\n\n### Schlussfolgerung\n\n${state.p5.conclusion||"(nicht eingetragen)"}\n\n> Die App unterstützt Messplanung, Datenvergleich und mathematische Auswertung. Die fachliche Interpretation bleibt Aufgabe der Lernenden.\n`}
+function protocolMarkdown(){const p=state.p3.plan||{},data=state.p4.data||[],fit=linreg(transformPoints("first"));return `# KINETIK-LAB – Das schlecht ausgespülte Becherglas
+
+- App-Version: ${VERSION}
+- Export: ${new Date().toLocaleString("de-DE")}
+
+## Phase 1 – Beobachtung
+
+${state.p1.observation||"(nicht eingetragen)"}
+
+**Simulierte Beobachtungszeit bis zur weitgehenden Entfärbung:** ${state.p1.observationTime!==null?fmtFixed(state.p1.observationTime,1)+" s":"–"}
+
+### Hypothesen
+
+${state.p1.hypotheses||"(nicht eingetragen)"}
+
+## Phase 2 – Forschungsfrage und Messplan
+
+**Forschungsfrage:** ${state.p2.question||"–"}
+
+**Idee zur quantitativen Erfassung:** ${state.p2.measure||"–"}
+
+**Erste Schätzung Messintervall:** ${state.p2.interval?state.p2.interval+" s":"–"}
+
+**Erste Schätzung Messdauer:** ${state.p2.duration?state.p2.duration+" s":"–"}
+
+**Erwartung:** ${state.p2.expectation||"–"}
+
+**Mögliche Fehlerquellen:** ${state.p2.errors||"–"}
+
+## Phase 3 – Virtueller Messplan
+
+- theoretisch gewählte Wellenlänge: ${p.theoLambda??"–"} nm
+- reale Wellenlänge: ${p.realLambda??"–"} nm
+- Messintervall: ${p.interval??"–"} s
+- Messdauer: ${p.duration??"–"} s
+- erwartete Messpunkte: ${p.points??"–"}
+
+## Phase 4 – Reales Experiment
+
+- Datenquelle: ${sourceTypeLabel(state.p4.sourceType)}${state.p4.sourceName?" · "+state.p4.sourceName:""}
+- tatsächliche Wellenlänge: ${state.p4.actualLambda||"–"} nm
+- Temperatur: ${state.p4.temperature||"–"} °C
+- Startverzögerung: ${state.p4.delay||"–"} s
+- Messwerte: ${data.length}
+- Abweichungen: ${state.p4.notes||"–"}
+
+## Phase 5 – Auswertung und Erkenntnis
+
+### 5A – Rohdaten
+
+${state.p5.rawObservation||"(nicht eingetragen)"}
+
+### 5B – Realität und Modell
+
+${state.p5.compareObservation||"(nicht eingetragen)"}
+
+### 5C – Reaktionsordnung bezüglich Kristallviolett
+
+- verwendetes ${mInf()}: ${state.p5.aInf||"–"}
+- ln-Fit k_app: ${fit?fmtFixed(-fit.slope,6)+" s⁻¹":"–"}
+- ln-Fit R²: ${fit?fmtFixed(fit.r2,5):"–"}
+
+${state.p5.conclusion||"(nicht eingetragen)"}
+
+### 5D – Einfluss der Hydroxidkonzentration
+
+${manualOHResults().map(x=>`- [OH⁻] = ${String(x.oh).replace(".",",")} mol/L → k_app = ${String(x.kapp).replace(".",",")} s⁻¹`).join("\\n")||"(noch keine k_app-Werte übertragen)"}
+
+${state.p5.ohConclusion||"(nicht eingetragen)"}
+
+### 5E – Wellenlänge
+
+${state.p5.waveConclusion||"(nicht eingetragen)"}
+
+### Finale Erkenntnis
+
+- Reaktionsordnung bezüglich CV⁺: ${state.p5.finalCvOrder||"–"}
+- Reaktionsordnung bezüglich OH⁻: ${state.p5.finalOhOrder||"–"}
+- Geschwindigkeitsgesetz: ${state.p5.finalRateLaw||"–"}
+
+**Begründung / Evidenz**
+
+${state.p5.finalEvidence||"(nicht eingetragen)"}
+
+**Unsicherheiten / Einschränkungen**
+
+${state.p5.finalUncertainty||"(nicht eingetragen)"}
+
+> Die App unterstützt Messplanung, Datenvergleich und mathematische Auswertung. Die fachliche Interpretation bleibt Aufgabe der Lernenden.
+`}
 function exportProtocol(){download(`KINETIK_LAB_ARBEITSSTAND_${Date.now()}.md`,protocolMarkdown(),"text/markdown;charset=utf-8")}
 
-function applyStateToUI(){applyNotation();setTeacher(state.teacher);setObservationTimer(state.p1.observationTime??0);$("p1Observation").value=state.p1.observation;$("p1Hypotheses").value=state.p1.hypotheses;$("p1Reveal").hidden=!state.p1.revealed;$("p2Question").value=state.p2.question;$("p2Measure").value=state.p2.measure;$("p2Interval").value=state.p2.interval;$("p2Duration").value=state.p2.duration;$("p2Errors").value=state.p2.errors;$("p2Expectation").value=state.p2.expectation;$("deviceSelect").value=state.p3.device;$("customWaves").value=state.p3.customWaves;$("theoLambda").value=state.p3.theoLambda;$("lambdaReason").value=state.p3.lambdaReason;$("kinInterval").value=state.p3.interval;$("kinDuration").value=state.p3.duration;$("useDelay").checked=state.p5.useDelay;$("aInfInput").value=state.p5.aInf;$("analysisConclusion").value=state.p5.conclusion;$("transformSelect").value=state.p5.transform||"first";renderDevice();renderKinLegend();renderRealData();drawSketch();renderP2Simulation();goPhase(state.currentPhase||1)}
+function applyStateToUI(){applyNotation();setTeacher(state.teacher);setObservationTimer(state.p1.observationTime??0);$("p1Observation").value=state.p1.observation;$("p1Hypotheses").value=state.p1.hypotheses;$("p1Reveal").hidden=!state.p1.revealed;$("p2Question").value=state.p2.question;$("p2Measure").value=state.p2.measure;$("p2Interval").value=state.p2.interval;$("p2Duration").value=state.p2.duration;$("p2Errors").value=state.p2.errors;$("p2Expectation").value=state.p2.expectation;$("deviceSelect").value=state.p3.device;$("customWaves").value=state.p3.customWaves;$("theoLambda").value=state.p3.theoLambda;$("lambdaReason").value=state.p3.lambdaReason;$("kinInterval").value=state.p3.interval;$("kinDuration").value=state.p3.duration;$("useDelay").checked=state.p5.useDelay;$("aInfInput").value=state.p5.aInf;$("analysisConclusion").value=state.p5.conclusion||"";$("transformSelect").value=state.p5.transform||"zero";renderDevice();renderKinLegend();renderRealData();drawSketch();renderP2Simulation();goPhase(state.currentPhase||1)}
 
 // Events
 $$('.phase-btn').forEach(b=>b.addEventListener("click",()=>goPhase(Number(b.dataset.phase))));
@@ -489,8 +718,19 @@ $("realLambdaSelect").addEventListener("change",e=>{state.p3.realLambda=e.target
 $("kinInterval").addEventListener("change",updatePointCount);$("kinDuration").addEventListener("change",updatePointCount);$("runKineticsBtn").addEventListener("click",runKinetics);$("clearRunsBtn").addEventListener("click",()=>{state.p3.runs=[];kinCurrent=null;kinAnim++;renderKinLegend();drawKinetics();renderStrategyCheck(null);saveState()});$("acceptPlanBtn").addEventListener("click",acceptPlan);
 [["actualLambda","actualLambda"],["actualInterval","actualInterval"],["actualDuration","actualDuration"],["temperature","temperature"],["startDelay","delay"],["realNotes","notes"]].forEach(([id,key])=>$(id).addEventListener("input",e=>{state.p4[key]=e.target.value;if(id==="actualLambda")drawWaveCompare();if(id==="startDelay")renderComparison();saveState()}));$("dataSourceType").addEventListener("change",e=>{state.p4.sourceType=e.target.value;renderSourceInfo();saveState()});
 $("realFile").addEventListener("change",e=>{const f=e.target.files?.[0];if(!f)return;if(/\.xlsx?$/i.test(f.name)){showError("importError","XLS/XLSX bitte zuerst als CSV exportieren.");return}const r=new FileReader();r.onload=()=>importText(r.result,f.name);r.readAsText(f)});$("parsePasteBtn").addEventListener("click",()=>importText($("pasteData").value,"Copy & Paste"));$("clearRealBtn").addEventListener("click",clearReal);$("devDataBtn").addEventListener("click",devData);$("exportMesswertBtn").addEventListener("click",exportMesswert);
-$$('.review-btn').forEach(b=>b.addEventListener("click",()=>openReview(Number(b.dataset.review))));$("reviewCopyBtn").addEventListener("click",copyReview);$("reviewCloseBtn").addEventListener("click",closeReview);$("reviewOverlay").addEventListener("click",e=>{if(e.target===$("reviewOverlay"))closeReview()});$("cvInfoBtn").addEventListener("click",()=>{$("cvInfoOverlay").hidden=false;$("cvInfoCloseBtn").focus()});$("cvInfoCloseBtn").addEventListener("click",()=>$("cvInfoOverlay").hidden=true);$("cvInfoOverlay").addEventListener("click",e=>{if(e.target===$("cvInfoOverlay"))$("cvInfoOverlay").hidden=true});$("colorMeasureInfoBtn").addEventListener("click",()=>{$("colorMeasureInfoOverlay").hidden=false;$("colorMeasureInfoCloseBtn").focus()});$("colorMeasureInfoCloseBtn").addEventListener("click",()=>$("colorMeasureInfoOverlay").hidden=true);$("colorMeasureInfoOverlay").addEventListener("click",e=>{if(e.target===$("colorMeasureInfoOverlay"))$("colorMeasureInfoOverlay").hidden=true});window.addEventListener("keydown",e=>{if(e.key==="Escape"){if(!$("colorMeasureInfoOverlay").hidden)$("colorMeasureInfoOverlay").hidden=true;else if(!$("cvInfoOverlay").hidden)$("cvInfoOverlay").hidden=true;else if(!$("reviewOverlay").hidden)closeReview()}});
-$("useDelay").addEventListener("change",e=>{state.p5.useDelay=e.target.checked;renderComparison();renderTransforms();saveState()});$("aInfInput").addEventListener("input",e=>{state.p5.aInf=e.target.value;renderComparison();renderTransforms();saveState()});$("transformSelect").addEventListener("change",e=>{state.p5.transform=e.target.value;renderTransforms();saveState()});$("analysisConclusion").addEventListener("input",e=>{state.p5.conclusion=e.target.value;saveState()});$("runOHSeriesBtn").addEventListener("click",runOHSeries);$("exportProtocolBtn").addEventListener("click",exportProtocol);
+$$('.review-btn').forEach(b=>b.addEventListener("click",()=>openReview(Number(b.dataset.review))));$("reviewCopyBtn").addEventListener("click",copyReview);$("reviewCloseBtn").addEventListener("click",closeReview);$("reviewOverlay").addEventListener("click",e=>{if(e.target===$("reviewOverlay"))closeReview()});$("cvInfoBtn").addEventListener("click",()=>{$("cvInfoOverlay").hidden=false;$("cvInfoCloseBtn").focus()});$("cvInfoCloseBtn").addEventListener("click",()=>$("cvInfoOverlay").hidden=true);$("cvInfoOverlay").addEventListener("click",e=>{if(e.target===$("cvInfoOverlay"))$("cvInfoOverlay").hidden=true});$("colorMeasureInfoBtn").addEventListener("click",()=>{$("colorMeasureInfoOverlay").hidden=false;$("colorMeasureInfoCloseBtn").focus()});$("colorMeasureInfoCloseBtn").addEventListener("click",()=>$("colorMeasureInfoOverlay").hidden=true);$("colorMeasureInfoOverlay").addEventListener("click",e=>{if(e.target===$("colorMeasureInfoOverlay"))$("colorMeasureInfoOverlay").hidden=true});window.addEventListener("keydown",e=>{if(e.key==="Escape"){if(!$("reactionOrderInfoOverlay").hidden)$("reactionOrderInfoOverlay").hidden=true;else if(!$("colorMeasureInfoOverlay").hidden)$("colorMeasureInfoOverlay").hidden=true;else if(!$("cvInfoOverlay").hidden)$("cvInfoOverlay").hidden=true;else if(!$("reviewOverlay").hidden)closeReview()}});
+$$('[data-sub5]').forEach(b=>b.addEventListener("click",()=>showSub5(b.dataset.sub5)));
+$("useDelay").addEventListener("change",e=>{state.p5.useDelay=e.target.checked;renderComparison();renderTransforms();saveState()});
+$("aInfInput").addEventListener("input",e=>{state.p5.aInf=e.target.value;renderComparison();renderTransforms();saveState()});
+$$('[data-comparemode]').forEach(b=>b.addEventListener("click",()=>setCompareMode(b.dataset.comparemode)));
+$("transformSelect").addEventListener("change",e=>{state.p5.transform=e.target.value;renderTransforms();saveState()});
+[["rawObservation","rawObservation"],["compareObservation","compareObservation"],["analysisConclusion","conclusion"],["ohConclusion","ohConclusion"],["waveConclusion","waveConclusion"],["finalCvOrder","finalCvOrder"],["finalOhOrder","finalOhOrder"],["finalRateLaw","finalRateLaw"],["finalEvidence","finalEvidence"],["finalUncertainty","finalUncertainty"]].forEach(([id,key])=>$(id).addEventListener("input",e=>{state.p5[key]=e.target.value;saveState()}));
+$$('[data-ohinput]').forEach(inp=>inp.addEventListener("input",e=>{state.p5.ohManual[e.target.dataset.ohinput]=e.target.value;renderOHResults();saveState()}));
+$("fillOHDevBtn").addEventListener("click",fillOHDevelopment);
+$("reactionOrderInfoBtn").addEventListener("click",()=>{$("reactionOrderInfoOverlay").hidden=false;$("reactionOrderInfoCloseBtn").focus()});
+$("reactionOrderInfoCloseBtn").addEventListener("click",()=>$("reactionOrderInfoOverlay").hidden=true);
+$("reactionOrderInfoOverlay").addEventListener("click",e=>{if(e.target===$("reactionOrderInfoOverlay"))$("reactionOrderInfoOverlay").hidden=true});
+$("exportProtocolBtn").addEventListener("click",exportProtocol);
 window.addEventListener("resize",()=>{if(state.currentPhase===2)drawSketch()});
 applyStateToUI();
 </script>

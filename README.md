@@ -2,12 +2,12 @@
 
 ## Entwicklungsstand
 
-**Version:** v0.1.5  
+**Version:** v0.1.6  
 **Status:** Entwicklungsprototyp – noch nicht für den regulären Unterrichtseinsatz freigegeben.
 
 Die App entwickelt eine Forschungssequenz zur photometrischen Kinetik von Kristallviolett und Hydroxid. Das reale Experiment bleibt der zentrale Bezugspunkt; die virtuelle Umgebung unterstützt Planung, Erprobung, Datenvergleich und Modellbildung.
 
-## Neu in v0.1.5
+## Neu in v0.1.6
 
 - Phase 2 wurde räumlich verdichtet: Skizze und Ein-Becherglas-Simulation sind nun annähernd gleich hoch; die längere Erläuterung zur Zeitsimulation steht über die gesamte Rahmenbreite darunter.
 - Die Endfarbe der Zeitmaßstab-Simulation ist deutlich blasser und bleibt nur noch schwach violett sichtbar.
@@ -62,7 +62,7 @@ Die Dateien können direkt in das Repository-Root hochgeladen werden. `.nojekyll
 > Die derzeit verwendeten kinetischen Geschwindigkeitsparameter sind Entwicklungswerte und noch nicht als quantitative Referenz für einen konkreten Schulversuch validiert.
 
 
-## Änderungen in v0.1.5
+## Änderungen in v0.1.6
 
 - Phase 3B: dezente Warnlogik bei zu kurzem erfasstem Kurvenausschnitt bzw. sehr wenigen Messpunkten; keine automatische Vorgabe einer „richtigen“ Messstrategie.
 - Phase 4: Datenquelle technisch vorbereitet (`Eigenes reales Experiment`, `Realer Referenzdatensatz`, `Virtueller Datensatz aus dem SpektralLab`).
