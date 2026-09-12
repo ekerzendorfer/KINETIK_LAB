@@ -2,41 +2,30 @@
 
 ## Entwicklungsstand
 
-**Version:** v0.1.0  
+**Version:** v0.1.2  
 **Status:** Entwicklungsprototyp – noch nicht für den regulären Unterrichtseinsatz freigegeben.
 
-Diese Version dient der gemeinsamen didaktischen und technischen Erprobung. Inhalte, Messparameter, Arbeitsaufträge, Importfunktionen und Auswertungen können sich bis zur Unterrichtsversion noch ändern.
+Die App entwickelt eine Forschungssequenz zur photometrischen Kinetik von Kristallviolett und Hydroxid. Das reale Experiment bleibt der zentrale Bezugspunkt; die virtuelle Umgebung unterstützt Planung, Erprobung, Datenvergleich und Modellbildung.
 
-## Ziel
+## Neu in v0.1.2
 
-Das KINETIK-LAB ist eine browserbasierte Lernumgebung zur Verbindung von
+- Der LehrerInnenmodus wird unauffällig im Footer über ein kleines Codefeld freigeschaltet; die Zugangshürde ist ausdrücklich keine Sicherheitsfunktion.
+- Der Freigabecode für Phase 2 blendet gleichzeitig die Zusatzinformation zu den Natronlaugeresten ein.
+- Nach der Phase-2-Freigabe bleibt die Gruppe zunächst in Phase 1 und kann Beobachtung/Hypothesen ergänzen; der Wechsel zu Phase 2 erfolgt bewusst anschließend.
+- Ab Phase 2 besitzt **„Ergebnisse zur Besprechung“** eine Funktion **„In Zwischenablage kopieren“**. Damit lassen sich eigene Formulierungen und Messbedingungen schnell in ein parallel geführtes Protokoll übernehmen.
+- Neue kompakte **Stoffinfo Kristallviolett** als Popup in Phase 2: farbige CV⁺-Form, Angriff von OH⁻ am zentralen C-Atom, Bildung der farblosen Carbinol-/Pseudobasenform und Unterbrechung des konjugierten Systems. Die Stoffinfo verrät keine Reaktionsordnung.
+- Die sichtbare Messgröße bleibt standardmäßig **Absorbanz A**. Eine spätere Umschaltung auf **Extinktion E** ist intern über eine zentrale Notationsschicht vorbereitet, aber noch nicht in der Benutzeroberfläche freigeschaltet.
+- Sitzungen aus v0.1.1 werden beim ersten Start soweit möglich übernommen.
 
-- präexperimenteller Planung,
-- virtuellem Erproben und bewusst möglichem Scheitern,
-- realer photometrischer Messung,
-- Import realer Messdaten,
-- Vergleich von Experiment und Simulation,
-- mathematischer Auswertung und Modellbildung.
+## Phasenfreigabe
 
-Als fachliches Beispiel dient die Entfärbung von Kristallviolett durch Hydroxidionen.
+Die Freigabecodes sind **didaktische Barrieren, keine Sicherheitsfunktion**. Phase 1 wird gemeinsam begonnen. Nach der gemeinsamen Besprechung kann der Code für Phase 2 allen Gruppen bekanntgegeben werden. Mit dessen Eingabe wird auch die Zusatzinformation zur Natronlauge sichtbar. Die Gruppen ergänzen daraufhin ihre eigene Dokumentation und wechseln erst danach bewusst in Phase 2.
 
-Die App soll das reale Experiment **nicht ersetzen**. Die Simulation unterstützt vor allem die Planung vor dem Experiment und die systematische Auswertung danach.
+Ab Phase 2 können Gruppen im eigenen Tempo arbeiten. Nach einem kurzen Gespräch mit Lehrperson oder Laborpersonal erhalten sie den jeweils nächsten Code.
 
-## Didaktische Phasen
+## Ergebnisse und Protokoll
 
-1. Beobachten
-2. Forschungsfrage und Messplan entwickeln
-3. Virtuell erproben
-   - geeignete Messwellenlänge
-   - Messintervall und Messdauer
-4. Reales Experiment
-5. Realdaten auswerten, mit Simulation vergleichen und ein kinetisches Modell ableiten
-
-Die einzelnen Phasen werden schrittweise freigegeben.
-
-## Wichtiger Hinweis zu v0.1.0
-
-Die derzeit verwendeten kinetischen Parameter sind **vorläufige Entwicklungswerte**. Sie werden noch mit realen Schulmessungen abgeglichen. Die App darf daher in dieser Version nicht als quantitativ validiertes Referenzmodell verstanden werden.
+Die App speichert die eigenen Texte und Messbedingungen lokal. Die Besprechungsansichten ab Phase 2 können als formatierten Klartext in die Zwischenablage kopiert werden. Zusätzlich bleibt der kumulative Markdown-Arbeitsstand erhalten.
 
 ## Dateien
 
@@ -44,51 +33,23 @@ Die derzeit verwendeten kinetischen Parameter sind **vorläufige Entwicklungswer
 index.html
 README.md
 .nojekyll
+docs/
+└── schuelerinnen/
+    ├── 00_Kurzanleitung_KINETIK_LAB.md
+    └── 01_Beobachtung_Hypothesen.md
 ```
-
-Die Anwendung ist als **Single-HTML-App** ausgeführt und benötigt keine Installation oder Serverlogik.
-
-## Lokal testen
-
-`index.html` im Browser öffnen.
 
 ## GitHub Pages
 
-Für ein einfaches Repository genügt es, die drei Dateien direkt im Hauptverzeichnis abzulegen.
+Die Dateien können direkt in das Repository-Root hochgeladen werden. `.nojekyll` verhindert eine unnötige Jekyll-Verarbeitung der statischen Dateien.
 
-Danach unter:
+## Noch offen
 
-**Settings → Pages → Build and deployment**
+- Feinschliff der einzelnen Phasen
+- sichtbare Option **Absorbanz A / Extinktion E** erst in einer späten Konsolidierungsphase
+- weitere SchülerInnen-Arbeitsblätter
+- LehrerInnenanleitung
+- Abgleich der vorläufigen kinetischen Modellparameter mit einem eigenen Realversuch
+- spätere DOCX-Downloads der stabilen Arbeits- und Anleitungsmaterialien
 
-einstellen:
-
-- Source: `Deploy from a branch`
-- Branch: `main`
-- Folder: `/ (root)`
-
-## .nojekyll
-
-Die leere Datei `.nojekyll` weist GitHub Pages an, die Dateien unverändert als statische Website bereitzustellen und keine Jekyll-Verarbeitung anzuwenden.
-
-Für diese Single-HTML-App ist sie nicht zwingend erforderlich, aber sinnvoll und unproblematisch.
-
-## Versionsstrategie
-
-- `v0.1.x` – frühe Entwicklungs- und Abstimmungsversionen
-- `v0.2.x` – didaktisch und technisch konsolidierte Testversionen
-- später `v1.0.0` – stabile Unterrichtsversion
-
-Für jede Entwicklungsstufe soll ein separat benanntes ZIP-Archiv bereitgestellt werden.
-
-## Geplante nächste Schritte
-
-- Feinschliff der fünf didaktischen Phasen
-- SchülerInnenanleitung und phasenbezogene Arbeitsunterlagen
-- Anpassung des Imports realer Messdaten
-- Schnittstelle zum MESSWERT_LAB
-- Abgleich des kinetischen Modells mit realen Schulmessungen
-- LehrerInnenhinweise und Sicherheitsinformationen
-
----
-
-Projektkontext: **CHEMIE mit KI**
+> Die derzeit verwendeten kinetischen Geschwindigkeitsparameter sind Entwicklungswerte und noch nicht als quantitative Referenz für einen konkreten Schulversuch validiert.
