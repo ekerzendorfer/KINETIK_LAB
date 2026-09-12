@@ -2,30 +2,35 @@
 
 ## Entwicklungsstand
 
-**Version:** v0.1.2  
+**Version:** v0.1.4  
 **Status:** Entwicklungsprototyp – noch nicht für den regulären Unterrichtseinsatz freigegeben.
 
 Die App entwickelt eine Forschungssequenz zur photometrischen Kinetik von Kristallviolett und Hydroxid. Das reale Experiment bleibt der zentrale Bezugspunkt; die virtuelle Umgebung unterstützt Planung, Erprobung, Datenvergleich und Modellbildung.
 
-## Neu in v0.1.2
+## Neu in v0.1.4
 
-- Der LehrerInnenmodus wird unauffällig im Footer über ein kleines Codefeld freigeschaltet; die Zugangshürde ist ausdrücklich keine Sicherheitsfunktion.
-- Der Freigabecode für Phase 2 blendet gleichzeitig die Zusatzinformation zu den Natronlaugeresten ein.
-- Nach der Phase-2-Freigabe bleibt die Gruppe zunächst in Phase 1 und kann Beobachtung/Hypothesen ergänzen; der Wechsel zu Phase 2 erfolgt bewusst anschließend.
-- Ab Phase 2 besitzt **„Ergebnisse zur Besprechung“** eine Funktion **„In Zwischenablage kopieren“**. Damit lassen sich eigene Formulierungen und Messbedingungen schnell in ein parallel geführtes Protokoll übernehmen.
-- Neue kompakte **Stoffinfo Kristallviolett** als Popup in Phase 2: farbige CV⁺-Form, Angriff von OH⁻ am zentralen C-Atom, Bildung der farblosen Carbinol-/Pseudobasenform und Unterbrechung des konjugierten Systems. Die Stoffinfo verrät keine Reaktionsordnung.
-- Die sichtbare Messgröße bleibt standardmäßig **Absorbanz A**. Eine spätere Umschaltung auf **Extinktion E** ist intern über eine zentrale Notationsschicht vorbereitet, aber noch nicht in der Benutzeroberfläche freigeschaltet.
-- Sitzungen aus v0.1.1 werden beim ersten Start soweit möglich übernommen.
+- Phase 2 wurde räumlich verdichtet: Skizze und Ein-Becherglas-Simulation sind nun annähernd gleich hoch; die längere Erläuterung zur Zeitsimulation steht über die gesamte Rahmenbreite darunter.
+- Die Endfarbe der Zeitmaßstab-Simulation ist deutlich blasser und bleibt nur noch schwach violett sichtbar.
+- Die Beispielwerte in den Eingabefeldern für die erste Schätzung von Messintervall und Messdauer wurden entfernt. Die Gruppen sollen eigene Werte formulieren.
+- Phase 3A: Der virtuelle Spektralscan läuft nun über etwa **5 s** und ist dadurch besser beobachtbar.
+- Phase 3B übernimmt, soweit vorhanden, die eigene Schätzung aus Phase 2 als Ausgangspunkt. Es gibt keine voreingestellte „gute“ Standardstrategie mehr.
+- Nach jedem virtuellen Testlauf erscheint eine **Reflexionshilfe ohne automatische Bewertung**: Zahl der Messpunkte, erfasste Zeitspanne und relative Signaländerung werden angezeigt; Leitfragen helfen beim Vergleich verschiedener Einstellungen.
+- Ein didaktischer Hinweis macht explizit, dass ein kurzer Ausschnitt einer gekrümmten Kurve nahezu geradlinig wirken kann. Damit wird eine zu kurze Messdauer erkennbar, ohne die optimale Einstellung vorzugeben.
+- Neues SchülerInnenblatt `03_Virtuelle_Erprobung.md` für Phase 3A/3B.
+
+## Didaktische Funktion von Phase 2
+
+Die Lernenden sollen Photometrie nicht aus dem Nichts „erfinden“ müssen. Zuerst formulieren sie eine eigene Messidee. Bei Bedarf steht ein kurzer fachlicher Exkurs zur Verfügung. Die optimale Messwellenlänge und der eigentliche photometrische Messplan werden erst in Phase 3 untersucht.
+
+Die kleine Zeitmaßstab-Simulation dient noch nicht der Bestimmung einer Reaktionsordnung. Sie soll lediglich eine begründete erste Vorstellung ermöglichen, in welcher Größenordnung Messintervall und Messdauer liegen könnten.
 
 ## Phasenfreigabe
 
-Die Freigabecodes sind **didaktische Barrieren, keine Sicherheitsfunktion**. Phase 1 wird gemeinsam begonnen. Nach der gemeinsamen Besprechung kann der Code für Phase 2 allen Gruppen bekanntgegeben werden. Mit dessen Eingabe wird auch die Zusatzinformation zur Natronlauge sichtbar. Die Gruppen ergänzen daraufhin ihre eigene Dokumentation und wechseln erst danach bewusst in Phase 2.
-
-Ab Phase 2 können Gruppen im eigenen Tempo arbeiten. Nach einem kurzen Gespräch mit Lehrperson oder Laborpersonal erhalten sie den jeweils nächsten Code.
+Die Freigabecodes sind **didaktische Barrieren, keine Sicherheitsfunktion**. Phase 1 wird gemeinsam begonnen. Nach der gemeinsamen Besprechung kann der Code für Phase 2 allen Gruppen bekanntgegeben werden. Ab Phase 2 können Gruppen im eigenen Tempo arbeiten und erhalten nach kurzer Rückmeldung den jeweils nächsten Code.
 
 ## Ergebnisse und Protokoll
 
-Die App speichert die eigenen Texte und Messbedingungen lokal. Die Besprechungsansichten ab Phase 2 können als formatierten Klartext in die Zwischenablage kopiert werden. Zusätzlich bleibt der kumulative Markdown-Arbeitsstand erhalten.
+Die App speichert eigene Texte und Messbedingungen lokal. Die Besprechungsansichten ab Phase 2 lassen sich als Klartext in die Zwischenablage kopieren. Zusätzlich bleibt der kumulative Markdown-Arbeitsstand erhalten.
 
 ## Dateien
 
@@ -36,7 +41,9 @@ README.md
 docs/
 └── schuelerinnen/
     ├── 00_Kurzanleitung_KINETIK_LAB.md
-    └── 01_Beobachtung_Hypothesen.md
+    ├── 01_Beobachtung_Hypothesen.md
+    ├── 02_Forschungsfrage_Messplan.md
+    └── 03_Virtuelle_Erprobung.md
 ```
 
 ## GitHub Pages
@@ -45,7 +52,7 @@ Die Dateien können direkt in das Repository-Root hochgeladen werden. `.nojekyll
 
 ## Noch offen
 
-- Feinschliff der einzelnen Phasen
+- weitere Erprobung und Feinschliff von Phase 3B
 - sichtbare Option **Absorbanz A / Extinktion E** erst in einer späten Konsolidierungsphase
 - weitere SchülerInnen-Arbeitsblätter
 - LehrerInnenanleitung
