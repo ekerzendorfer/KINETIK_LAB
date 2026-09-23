@@ -2,63 +2,58 @@
 
 ## Entwicklungsstand
 
-**Version:** v0.1.7  
+**Version:** v0.1.8  
 **Status:** Entwicklungsprototyp – noch nicht für den regulären Unterrichtseinsatz freigegeben.
 
 Die App entwickelt eine Forschungssequenz zur photometrischen Kinetik von Kristallviolett und Hydroxid. Das reale Experiment bleibt der zentrale Bezugspunkt; die virtuelle Umgebung unterstützt Planung, Erprobung, Datenvergleich und Modellbildung.
 
-## Neu in v0.1.7
+## Neu in v0.1.8
 
-- Der kinetische Referenzfall ist erstmals an einer eigenen realen Schulmessung kalibriert: Vernier Colorimeter, 565 nm, c₀(CV⁺) = 1,20·10⁻⁵ mol/L, c₀(OH⁻) = 0,0300 mol/L.
-- Referenzparameter des virtuellen Modells: k_app ≈ 0,00534 s⁻¹ und A∞ ≈ 0,01136.
-- Der reale 20-min-Referenzlauf kann in Phase 4 direkt geladen werden; die bereinigte CSV liegt zusätzlich unter `docs/referenzdaten/`.
-- Die ca. 15 s Misch-/Überführungszeit wird dokumentiert, aber nicht in das virtuelle Reaktionsmodell eingebaut und standardmäßig nicht auf die Zeitachse aufgeschlagen.
-- Phase 5B weist ausdrücklich darauf hin, dass Real-/Modellabweichungen nicht verborgen werden.
-- Die OH⁻-Variation bleibt vorerst eine Modellvorhersage; nur der Referenzpunkt bei 0,030 M ist real kalibriert.
+- Phase 1: Die qualitative Entfärbungsanimation wurde von ca. 7 s auf ca. 20 s verlängert.
+- Phase 3A: Beim Start ist kein Messgerät und keine reale Wellenlänge mehr vorausgewählt.
+- Der Spektralscan kann bewusst vor der Gerätewahl durchgeführt werden. Erst danach werden die verfügbaren Gerätewellenlängen eingeblendet.
+- Beim Vernier-Colorimeter wird 565 nm nicht mehr automatisch gewählt; die Lernenden müssen die geeignete verfügbare Wellenlänge selbst festlegen.
+- Phase 3B: 1000 s wurde als zusätzliche Messdauer ergänzt.
+- Hinweise zur Messstrategie reagieren nun auch auf 120/180 s Messdauer und auf relativ grobe Intervalle ab 20 s.
+- Ein Messplan kann erst nach mindestens einem virtuellen Testlauf übernommen werden.
+- Phase 4: CSV-Dateien mit mehreren Spalten können vor dem Import über sichtbare Dropdowns für Zeit- und Absorbanz-/Extinktionsspalte zugeordnet werden.
+- Vernier-Spalten mit der Bezeichnung „Absorption“ werden jetzt korrekt als Absorbanz erkannt; Transmission wird nicht mehr versehentlich als Zielgröße verwendet.
+- Synthetische Entwicklungsdaten werden deutlicher als solche gekennzeichnet und überschreiben die Beobachtungsnotiz entsprechend.
+- Phase 5A: A∞ wird bei eigenen Importen nicht mehr automatisch aus den letzten fünf Messpunkten übernommen.
+- Für A∞ stehen drei transparente Wege zur Verfügung: realer Referenzwert bei 565 nm, Schätzung aus einem tatsächlichen Endplateau oder begründete manuelle Eingabe.
+- Phase 5C: Werte sehr nahe an A∞ werden aus der linearen Regression ausgeschlossen, weil Logarithmus und Kehrwert dort Messrauschen stark verstärken. Der verwendete Fitbereich wird sichtbar ausgewiesen; die Rohdaten bleiben vollständig erhalten.
+- Phase 5D: Der Weg von der OH⁻-Variation über k_app zur Reaktionsordnung wird in vier Schritten explizit dargestellt.
+- Phase 5E: Optionaler Zusatzauftrag für einen Wellenlängenvergleich im SpektralLab.
+- Finale Erkenntnis: kleine „Denkhilfe“-Schaltflächen zu Reaktionsordnung CV⁺, Reaktionsordnung OH⁻ und Geschwindigkeitsgesetz.
 
+## Real kalibrierter Referenzfall
 
-## Didaktische Funktion von Phase 2
+- c₀(CV⁺) = 1,20·10⁻⁵ mol/L
+- c₀(OH⁻) = 0,0300 mol/L
+- Vernier Colorimeter, 565 nm
+- k_app ≈ 0,00534 s⁻¹
+- A∞ ≈ 0,01136
 
-Die Lernenden sollen Photometrie nicht aus dem Nichts „erfinden“ müssen. Zuerst formulieren sie eine eigene Messidee. Bei Bedarf steht ein kurzer fachlicher Exkurs zur Verfügung. Die optimale Messwellenlänge und der eigentliche photometrische Messplan werden erst in Phase 3 untersucht.
+Die etwa 15 s zwischen Mischen und erster registrierter Messung werden als reale experimentelle Startverzögerung dokumentiert, aber nicht in das virtuelle Reaktionsmodell eingebaut.
 
-Die kleine Zeitmaßstab-Simulation dient noch nicht der Bestimmung einer Reaktionsordnung. Sie soll lediglich eine begründete erste Vorstellung ermöglichen, in welcher Größenordnung Messintervall und Messdauer liegen könnten.
+## Wichtiger Hinweis zu Phase 5C
 
-## Phasenfreigabe
+Bei einer Langzeitmessung nähert sich A der Größe A∞. Dann werden A − A∞ sehr klein. Die Transformationen ln(A − A∞) und besonders 1/(A − A∞) verstärken deshalb unvermeidlich kleine Messfehler und die begrenzte Auflösung des Messgeräts.
 
-Die Freigabecodes sind **didaktische Barrieren, keine Sicherheitsfunktion**. Phase 1 wird gemeinsam begonnen. Nach der gemeinsamen Besprechung kann der Code für Phase 2 allen Gruppen bekanntgegeben werden. Ab Phase 2 können Gruppen im eigenen Tempo arbeiten und erhalten nach kurzer Rückmeldung den jeweils nächsten Code.
+v0.1.8 verwendet deshalb für alle drei Ordnungsprüfungen denselben transparenten Auswertungsbereich: Nur Messpunkte mit A − A∞ ≥ 5 % des anfänglichen Signals oberhalb von A∞ werden für die lineare Regression herangezogen. Spätere Punkte bleiben in den Rohdaten erhalten.
 
-## Ergebnisse und Protokoll
-
-Die App speichert eigene Texte und Messbedingungen lokal. Die Besprechungsansichten ab Phase 2 lassen sich als Klartext in die Zwischenablage kopieren. Zusätzlich bleibt der kumulative Markdown-Arbeitsstand erhalten.
-
-## Dateien
-
-```text
-index.html
-README.md
-.nojekyll
-docs/
-└── schuelerinnen/
-    ├── 00_Kurzanleitung_KINETIK_LAB.md
-    ├── 01_Beobachtung_Hypothesen.md
-    ├── 02_Forschungsfrage_Messplan.md
-    ├── 03_Virtuelle_Erprobung.md
-    └── 05_Auswertung_Erkenntnis.md
-└── referenzdaten/
-    └── KV_Referenz_565nm_KINETIK_LAB.csv
-```
+Beim hinterlegten realen Referenzlauf führt dies ungefähr bis 575 s und liefert für ln(A − A∞) eine nahezu lineare Darstellung mit k_app ≈ 0,00531 s⁻¹.
 
 ## GitHub Pages
 
-Die Dateien können direkt in das Repository-Root hochgeladen werden. `.nojekyll` verhindert eine unnötige Jekyll-Verarbeitung der statischen Dateien.
+`index.html` kann direkt im Repository-Root verwendet werden. Die beigefügte `.nojekyll` verhindert eine unnötige Jekyll-Verarbeitung.
 
 ## Noch offen
 
 - Wiederholungsmessungen der niedrigen und hohen CV-Konzentration mit längerer Messdauer
 - reale Validierung der OH⁻-Reihe bei 0,005 / 0,010 / 0,020 / 0,030 mol/L
-- optionaler Vergleich 565 nm mit einer Messung näher am spektralen Maximum
-- spätere Angleichung des Kinetik-Kerns im SpektralLab an denselben real kalibrierten Referenzfall
-- sichtbare Option **Absorbanz A / Extinktion E** erst in einer späten Konsolidierungsphase
+- optionaler realer Vergleich 565 nm mit einer Messung näher am spektralen Maximum
+- Anpassung des Kinetik-Kerns im SpektralLab an denselben real kalibrierten Referenzfall
 - LehrerInnenanleitung und spätere DOCX-Downloads der stabilen Materialien
 
-> v0.1.7 ist **real kalibriert, aber nicht „realitätskosmetisiert“**: Der Referenzfall basiert auf einer realen Messung, während verbleibende Abweichungen und noch nicht validierte Modellbereiche ausdrücklich sichtbar bleiben.
+> v0.1.8 bleibt bewusst **real kalibriert, aber nicht „realitätskosmetisiert“**: Reale Messungen verankern den Referenzfall, während Modellgrenzen, Messrauschen und noch nicht validierte Bereiche sichtbar bleiben.
