@@ -2,21 +2,20 @@
 
 ## Entwicklungsstand
 
-**Version:** v0.1.6  
+**Version:** v0.1.7  
 **Status:** Entwicklungsprototyp – noch nicht für den regulären Unterrichtseinsatz freigegeben.
 
 Die App entwickelt eine Forschungssequenz zur photometrischen Kinetik von Kristallviolett und Hydroxid. Das reale Experiment bleibt der zentrale Bezugspunkt; die virtuelle Umgebung unterstützt Planung, Erprobung, Datenvergleich und Modellbildung.
 
-## Neu in v0.1.6
+## Neu in v0.1.7
 
-- Phase 2 wurde räumlich verdichtet: Skizze und Ein-Becherglas-Simulation sind nun annähernd gleich hoch; die längere Erläuterung zur Zeitsimulation steht über die gesamte Rahmenbreite darunter.
-- Die Endfarbe der Zeitmaßstab-Simulation ist deutlich blasser und bleibt nur noch schwach violett sichtbar.
-- Die Beispielwerte in den Eingabefeldern für die erste Schätzung von Messintervall und Messdauer wurden entfernt. Die Gruppen sollen eigene Werte formulieren.
-- Phase 3A: Der virtuelle Spektralscan läuft nun über etwa **5 s** und ist dadurch besser beobachtbar.
-- Phase 3B übernimmt, soweit vorhanden, die eigene Schätzung aus Phase 2 als Ausgangspunkt. Es gibt keine voreingestellte „gute“ Standardstrategie mehr.
-- Nach jedem virtuellen Testlauf erscheint eine **Reflexionshilfe ohne automatische Bewertung**: Zahl der Messpunkte, erfasste Zeitspanne und relative Signaländerung werden angezeigt; Leitfragen helfen beim Vergleich verschiedener Einstellungen.
-- Ein didaktischer Hinweis macht explizit, dass ein kurzer Ausschnitt einer gekrümmten Kurve nahezu geradlinig wirken kann. Damit wird eine zu kurze Messdauer erkennbar, ohne die optimale Einstellung vorzugeben.
-- Neues SchülerInnenblatt `03_Virtuelle_Erprobung.md` für Phase 3A/3B.
+- Der kinetische Referenzfall ist erstmals an einer eigenen realen Schulmessung kalibriert: Vernier Colorimeter, 565 nm, c₀(CV⁺) = 1,20·10⁻⁵ mol/L, c₀(OH⁻) = 0,0300 mol/L.
+- Referenzparameter des virtuellen Modells: k_app ≈ 0,00534 s⁻¹ und A∞ ≈ 0,01136.
+- Der reale 20-min-Referenzlauf kann in Phase 4 direkt geladen werden; die bereinigte CSV liegt zusätzlich unter `docs/referenzdaten/`.
+- Die ca. 15 s Misch-/Überführungszeit wird dokumentiert, aber nicht in das virtuelle Reaktionsmodell eingebaut und standardmäßig nicht auf die Zeitachse aufgeschlagen.
+- Phase 5B weist ausdrücklich darauf hin, dass Real-/Modellabweichungen nicht verborgen werden.
+- Die OH⁻-Variation bleibt vorerst eine Modellvorhersage; nur der Referenzpunkt bei 0,030 M ist real kalibriert.
+
 
 ## Didaktische Funktion von Phase 2
 
@@ -43,7 +42,10 @@ docs/
     ├── 00_Kurzanleitung_KINETIK_LAB.md
     ├── 01_Beobachtung_Hypothesen.md
     ├── 02_Forschungsfrage_Messplan.md
-    └── 03_Virtuelle_Erprobung.md
+    ├── 03_Virtuelle_Erprobung.md
+    └── 05_Auswertung_Erkenntnis.md
+└── referenzdaten/
+    └── KV_Referenz_565nm_KINETIK_LAB.csv
 ```
 
 ## GitHub Pages
@@ -52,23 +54,11 @@ Die Dateien können direkt in das Repository-Root hochgeladen werden. `.nojekyll
 
 ## Noch offen
 
-- weitere Erprobung und Feinschliff von Phase 3B
+- Wiederholungsmessungen der niedrigen und hohen CV-Konzentration mit längerer Messdauer
+- reale Validierung der OH⁻-Reihe bei 0,005 / 0,010 / 0,020 / 0,030 mol/L
+- optionaler Vergleich 565 nm mit einer Messung näher am spektralen Maximum
+- spätere Angleichung des Kinetik-Kerns im SpektralLab an denselben real kalibrierten Referenzfall
 - sichtbare Option **Absorbanz A / Extinktion E** erst in einer späten Konsolidierungsphase
-- weitere SchülerInnen-Arbeitsblätter
-- LehrerInnenanleitung
-- Abgleich der vorläufigen kinetischen Modellparameter mit einem eigenen Realversuch
-- spätere DOCX-Downloads der stabilen Arbeits- und Anleitungsmaterialien
+- LehrerInnenanleitung und spätere DOCX-Downloads der stabilen Materialien
 
-> Die derzeit verwendeten kinetischen Geschwindigkeitsparameter sind Entwicklungswerte und noch nicht als quantitative Referenz für einen konkreten Schulversuch validiert.
-
-
-## Änderungen in v0.1.6
-
-- Phase 3B: dezente Warnlogik bei zu kurzem erfasstem Kurvenausschnitt bzw. sehr wenigen Messpunkten; keine automatische Vorgabe einer „richtigen“ Messstrategie.
-- Phase 4: Datenquelle technisch vorbereitet (`Eigenes reales Experiment`, `Realer Referenzdatensatz`, `Virtueller Datensatz aus dem SpektralLab`).
-- Hinweis und Direktlink zum SpektralLab für Schulen ohne geeignetes Photometer.
-- Entwicklungs-Testdatensatz bleibt ausschließlich im LehrerInnenmodus und wird eindeutig als synthetisch gekennzeichnet.
-- CSV-Export auf den vorbereiteten Standard `KINETIK_LAB_CSV_v1` umgestellt: `Versuch`, `Zeit_s`, `Absorbanz`, Wellenlänge, Konzentrationen, Schichtdicke, Temperatur, Startverzögerung und Datenquelle.
-- Die Gerätezeit bleibt im Export unverändert; eine Startverzögerung wird separat dokumentiert.
-
-Phase 4 ist weiterhin ausdrücklich **vorläufig**. Die endgültige Ausgestaltung erfolgt nach Vorliegen realer Messdaten mit Spektralphotometer und Colorimeter.
+> v0.1.7 ist **real kalibriert, aber nicht „realitätskosmetisiert“**: Der Referenzfall basiert auf einer realen Messung, während verbleibende Abweichungen und noch nicht validierte Modellbereiche ausdrücklich sichtbar bleiben.
